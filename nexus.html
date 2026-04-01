@@ -204,11 +204,11 @@
     /* Autocomplete */
     .ac-wrap { position:relative; }
     .ac-list {
-      position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:999;
-      background:rgba(18,7,11,.96); backdrop-filter:blur(20px);
-      border:1px solid var(--glass-bd-s); border-radius:10px;
+      position:fixed; z-index:9999;
+      background:rgb(22, 9, 14); backdrop-filter:blur(20px);
+      border:1px solid rgba(255,135,65,.45); border-radius:10px;
       overflow:hidden; display:none;
-      box-shadow:0 8px 28px rgba(0,0,0,.5);
+      box-shadow:0 12px 36px rgba(0,0,0,.75);
     }
     .ac-list.open { display:block; }
     .ac-item {
@@ -914,7 +914,8 @@ async function searchBAN(q) {
 }
 
 function renderAC() {
-  const list = document.getElementById('ac-list');
+  const list  = document.getElementById('ac-list');
+  const input = document.getElementById('i-addr');
   if (!acItems.length) { closeAC(); return; }
   acIdx = -1;
   list.innerHTML = acItems.map((it, i) => `
@@ -922,6 +923,11 @@ function renderAC() {
       <div class="ac-main">${esc(it.label)}</div>
       <div class="ac-sub">${typeLabel(it.type)}</div>
     </div>`).join('');
+  // Position relative to input
+  const r = input.getBoundingClientRect();
+  list.style.top   = (r.bottom + 4) + 'px';
+  list.style.left  = r.left + 'px';
+  list.style.width = r.width + 'px';
   list.classList.add('open');
 }
 
