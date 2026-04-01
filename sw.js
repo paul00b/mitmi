@@ -1,4 +1,4 @@
-const CACHE = 'mitmi-v1';
+const CACHE = 'mitmi-v2';
 const ASSETS = [
   '/',
   '/index.html',
