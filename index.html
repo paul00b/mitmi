@@ -24,6 +24,7 @@
       --txt3:       rgba(255, 185, 145, 0.42);
       --sidebar:    400px;
       --r:          12px;
+      --nb:         64px;
     }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; overflow:hidden; }
@@ -43,7 +44,7 @@
         radial-gradient(circle at 50% 50%, rgba(255,179,71,.025) 0%, transparent 60%);
     }
 
-    /* ── SIDEBAR ────────────────────────────────── */
+    /* ── SIDEBAR (desktop) ──────────────────────────── */
     .sidebar {
       width: var(--sidebar);
       flex-shrink: 0;
@@ -63,15 +64,12 @@
     .sidebar::-webkit-scrollbar { width:4px; }
     .sidebar::-webkit-scrollbar-thumb { background:rgba(255,107,53,.25); border-radius:2px; }
 
-    /* Header */
     .hd {
       padding: 26px 24px 18px;
       border-bottom: 1px solid var(--glass-bd);
       flex-shrink: 0;
     }
-    .logo {
-      display:flex; align-items:center; gap:10px; margin-bottom:6px;
-    }
+    .logo { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
     .logo-ic {
       width:38px; height:38px; border-radius:11px; flex-shrink:0;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -87,16 +85,13 @@
     }
     .tagline { font-size:12px; color:var(--txt3); line-height:1.5; }
 
-    /* Content */
     .sb-body { flex:1; padding:18px; display:flex; flex-direction:column; gap:14px; }
 
-    /* Section label */
     .lbl {
       font-size:10.5px; font-weight:600; text-transform:uppercase;
       letter-spacing:1.1px; color:var(--txt3); margin-bottom:9px;
     }
 
-    /* Glass card */
     .card {
       background: var(--glass-bg);
       backdrop-filter: blur(16px);
@@ -108,7 +103,6 @@
     }
     .card:hover { background:var(--glass-bg-h); border-color:rgba(255,135,65,.22); }
 
-    /* Mode selector */
     .modes {
       display:flex; gap:5px; padding:4px;
       background:rgba(255,195,140,.035);
@@ -122,12 +116,8 @@
       background:transparent; color:var(--txt3);
       display:flex; align-items:center; justify-content:center; gap:4px;
     }
-    .mode-btn.on {
-      background:rgba(255,107,53,.14);
-      color:var(--accent);
-    }
+    .mode-btn.on { background:rgba(255,107,53,.14); color:var(--accent); }
 
-    /* Team list */
     .team-list { display:flex; flex-direction:column; gap:7px; min-height:36px; }
     .empty { font-size:12px; color:var(--txt3); text-align:center; padding:12px 0; }
 
@@ -153,10 +143,10 @@
     .mbr-addr { font-size:11px; color:var(--txt3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
     .st { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-    .st.pending { background:rgba(255,200,80,.55); }
-    .st.loading { background:var(--amber); animation:pu .9s infinite; }
-    .st.geocoded{ background:rgba(100,220,100,.75); }
-    .st.error   { background:var(--accent2); }
+    .st.pending  { background:rgba(255,200,80,.55); }
+    .st.loading  { background:var(--amber); animation:pu .9s infinite; }
+    .st.geocoded { background:rgba(100,220,100,.75); }
+    .st.error    { background:var(--accent2); }
     @keyframes pu { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.75)} }
 
     .rm-btn {
@@ -167,7 +157,6 @@
     }
     .rm-btn:hover { color:var(--accent2); }
 
-    /* Form */
     .form { display:flex; flex-direction:column; gap:9px; }
     .il { font-size:11px; font-weight:500; color:var(--txt2); margin-bottom:4px; display:block; }
     .gi {
@@ -191,8 +180,6 @@
     }
     .btn-add:hover { background:rgba(255,107,53,.16); border-color:rgba(255,107,53,.46); transform:translateY(-1px); }
 
-
-    /* Autocomplete */
     .ac-wrap { position:relative; }
     .ac-list {
       position:fixed; z-index:9999;
@@ -209,13 +196,10 @@
       display:flex; flex-direction:column; gap:1px;
     }
     .ac-item:last-child { border-bottom:none; }
-    .ac-item:hover, .ac-item.hi {
-      background:rgba(255,107,53,.12);
-    }
+    .ac-item:hover, .ac-item.hi { background:rgba(255,107,53,.12); }
     .ac-main { font-size:12.5px; color:var(--txt); }
     .ac-sub  { font-size:10.5px; color:var(--txt3); }
 
-    /* Primary button */
     .btn-primary {
       width:100%; padding:13px;
       background:linear-gradient(135deg, var(--accent), var(--accent2));
@@ -228,7 +212,6 @@
     .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 28px rgba(255,107,53,.42); }
     .btn-primary:disabled { opacity:.42; cursor:not-allowed; }
 
-    /* Loading */
     .ld-card { text-align:center; padding:22px 14px; }
     .spinner {
       width:30px; height:30px; border:3px solid rgba(255,107,53,.15);
@@ -239,7 +222,6 @@
     .ld-main { font-size:12.5px; color:var(--txt2); }
     .ld-sub  { font-size:11px; color:var(--txt3); margin-top:3px; }
 
-    /* Result cards */
     .res-card {
       padding:15px; cursor:pointer; position:relative; overflow:hidden;
       transition:all .2s;
@@ -260,7 +242,6 @@
       font-size:10.5px; font-weight:700;
     }
     .rc-lbl { font-size:11.5px; font-weight:600; color:var(--txt2); }
-
     .rc-loc  { font-size:13.5px; font-weight:600; margin-bottom:3px; }
     .rc-meta { font-size:11px; color:var(--txt3); margin-bottom:10px; }
 
@@ -284,7 +265,6 @@
       border-radius:20px; font-size:10.5px; color:var(--txt2);
     }
 
-    /* Winner card */
     .res-card.winner {
       border-color: rgba(255,179,71,.38);
       background: rgba(255,179,71,.055);
@@ -301,7 +281,6 @@
       margin-bottom:10px;
     }
 
-    /* Score pills */
     .score-pills { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:11px; }
     .score-pill {
       padding:3px 8px;
@@ -310,7 +289,6 @@
       display:flex; align-items:center; gap:3px;
     }
 
-    /* Travel time bars */
     .tt-bar-row { margin-bottom:7px; }
     .tt-bar-hd  { display:flex; align-items:center; justify-content:space-between; margin-bottom:3px; }
     .tt-bar-nm  { font-size:11.5px; color:var(--txt2); display:flex; align-items:center; gap:6px; }
@@ -318,7 +296,6 @@
     .tt-bar-bg  { height:3px; background:rgba(255,195,140,.08); border-radius:2px; overflow:hidden; }
     .tt-bar-fg  { height:100%; border-radius:2px; transition:width .5s ease; }
 
-    /* Why block */
     .why-block {
       margin-top:11px; padding:10px 12px;
       background:rgba(255,179,71,.05); border:1px solid rgba(255,179,71,.13);
@@ -326,7 +303,7 @@
     }
     .why-block strong { color:var(--amber); font-weight:600; }
 
-    /* ── MAP ─────────────────────────────────────── */
+    /* ── MAP ──────────────────────────────────────────── */
     #map-wrap { flex:1; position:relative; }
     #map      { width:100%; height:100%; }
 
@@ -340,7 +317,7 @@
     .ml-row   { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--txt2); margin-bottom:4px; }
     .ml-dot   { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
 
-    /* Notification */
+    /* ── NOTIFICATION ─────────────────────────────────── */
     .notif {
       position:fixed; top:18px; right:18px; z-index:9999;
       padding:11px 15px; background:rgba(12,5,7,.92);
@@ -353,7 +330,7 @@
     .notif.success { border-color:rgba(100,220,100,.3); }
     @keyframes siri { from{opacity:0;transform:translateX(15px)} to{opacity:1;transform:none} }
 
-    /* Leaflet overrides */
+    /* ── LEAFLET OVERRIDES ───────────────────────────── */
     .leaflet-popup-content-wrapper {
       background:rgba(14,6,9,.92) !important;
       backdrop-filter:blur(18px) !important;
@@ -369,82 +346,151 @@
     .leaflet-control-zoom a { background:rgba(14,6,9,.85) !important; color:var(--txt) !important; border-color:var(--glass-bd) !important; }
     .leaflet-control-zoom a:hover { background:rgba(255,107,53,.15) !important; }
 
-    /* ── MOBILE BOTTOM SHEET ─────────────────────── */
+    /* ── MOBILE ───────────────────────────────────────── */
     @media(max-width:768px){
       body { flex-direction:column; }
 
-      /* Map takes full screen */
-      #map-wrap {
-        position:fixed; inset:0; z-index:0;
-        height:100dvh !important;
-      }
+      /* Map always fullscreen background */
+      #map-wrap { position:fixed; inset:0; z-index:0; height:100dvh !important; }
 
-      /* Sidebar becomes bottom sheet */
-      .sidebar {
-        position:fixed; bottom:0; left:0; right:0; z-index:100;
-        width:100%; height:auto;
-        max-height:90dvh;
-        border-right:none;
+      /* Sidebar hidden — replaced by bottom nav + panels */
+      .sidebar { display:none !important; }
+
+      /* Legend above navbar */
+      .map-legend { bottom:calc(var(--nb) + 10px); right:12px; position:fixed; }
+
+      /* ── Bottom Navbar ─────────────────────────────── */
+      .bottom-nav {
+        display:flex;
+        position:fixed; bottom:0; left:0; right:0; z-index:300;
+        height:var(--nb);
+        background:rgba(10,4,6,.97);
+        backdrop-filter:blur(24px);
+        -webkit-backdrop-filter:blur(24px);
+        border-top:1px solid var(--glass-bd);
+        padding-bottom:env(safe-area-inset-bottom, 0px);
+      }
+      .nb-btn {
+        flex:1; display:flex; flex-direction:column; align-items:center;
+        justify-content:center; gap:3px;
+        border:none; background:transparent; color:var(--txt3);
+        cursor:pointer; font-family:inherit; transition:color .2s;
+        padding:8px 0;
+      }
+      .nb-btn.nb-active { color:var(--accent); }
+      .nb-ic  { font-size:22px; line-height:1; }
+      .nb-lbl { font-size:10px; font-weight:500; letter-spacing:.2px; }
+
+      /* ── "+" FAB ────────────────────────────────────── */
+      .mob-fab {
+        display:flex;
+        position:fixed; bottom:calc(var(--nb) + 14px); right:16px; z-index:200;
+        width:52px; height:52px; border-radius:50%;
+        background:linear-gradient(135deg,var(--accent),var(--accent2));
+        box-shadow:0 4px 20px var(--glow);
+        align-items:center; justify-content:center;
+        font-size:26px; font-weight:300; line-height:1;
+        border:none; cursor:pointer; color:#fff;
+        transition:transform .2s, box-shadow .2s;
+      }
+      .mob-fab:active { transform:scale(.92); }
+
+      /* ── Bottom Sheets ──────────────────────────────── */
+      .mob-sheet {
+        position:fixed; bottom:0; left:0; right:0; z-index:250;
+        max-height:88dvh;
+        background:rgba(10,4,6,.98);
+        backdrop-filter:blur(28px);
+        -webkit-backdrop-filter:blur(28px);
         border-top:1px solid var(--glass-bd-s);
         border-radius:20px 20px 0 0;
-        background:rgba(10,4,6,.97);
-        transform:translateY(calc(100% - 72px));
+        transform:translateY(100%);
         transition:transform .35s cubic-bezier(.32,.72,0,1);
-        overflow:hidden;
-        will-change:transform;
-        touch-action:none;
+        display:flex; flex-direction:column;
+        will-change:transform; touch-action:none;
       }
-      .sidebar.sheet-mid      { transform:translateY(45%); }
-      .sidebar.sheet-expanded { transform:translateY(0); }
+      .mob-sheet.mob-open { transform:translateY(0); }
+      .mob-sheet-short { max-height:58dvh; }
 
-      /* Drag handle */
-      .sheet-handle {
-        display:flex; justify-content:center; align-items:center;
-        padding:14px 0 8px; cursor:grab; flex-shrink:0;
+      .mob-sh-handle {
+        display:flex; justify-content:center; padding:12px 0 6px;
+        cursor:grab; flex-shrink:0;
       }
-      .sheet-handle-bar {
+      .mob-sh-bar {
         width:36px; height:4px; border-radius:2px;
         background:rgba(255,135,65,.35);
       }
-
-      /* Header compact on mobile */
-      .hd { padding:10px 20px 12px; }
-      .logo-tx { font-size:18px; }
-      .tagline  { display:none; }
-
-      /* Scrollable body */
-      .sb-body { padding:14px 16px; overflow-y:auto; max-height:calc(90dvh - 90px); }
-
-      /* FAB to toggle sheet */
-      .sheet-fab {
-        display:flex;
-        position:fixed; bottom:88px; right:16px; z-index:101;
-        width:48px; height:48px; border-radius:50%;
-        background:linear-gradient(135deg,var(--accent),var(--accent2));
-        box-shadow:0 4px 18px var(--glow);
-        align-items:center; justify-content:center;
-        font-size:20px; border:none; cursor:pointer;
-        transition:transform .2s;
+      .mob-sh-hdr {
+        display:flex; align-items:center; justify-content:space-between;
+        padding:0 16px 12px; border-bottom:1px solid var(--glass-bd);
+        margin-bottom:0; flex-shrink:0;
       }
-      .sheet-fab:active { transform:scale(.92); }
+      .mob-sh-title { font-size:15px; font-weight:700; color:var(--txt); }
+      .mob-sh-close {
+        background:rgba(255,255,255,.07); border:none; color:var(--txt2);
+        font-size:14px; cursor:pointer; width:28px; height:28px;
+        border-radius:50%; display:flex; align-items:center; justify-content:center;
+        transition:background .15s; font-family:inherit;
+      }
+      .mob-sh-close:hover { background:rgba(255,107,53,.18); color:#fff; }
+      .mob-sh-inner {
+        flex:1; overflow-y:auto; padding:14px 16px;
+        padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));
+        scrollbar-width:thin;
+        scrollbar-color:rgba(255,107,53,.2) transparent;
+      }
 
-      /* Legend repositioned */
-      .map-legend { bottom:88px; right:68px; }
+      /* ── Tab Panels ─────────────────────────────────── */
+      .mob-panel {
+        display:none;
+        position:fixed; inset:0; bottom:var(--nb); z-index:150;
+        background: radial-gradient(ellipse 80% 100% at 15% 50%, #2b0e00 0%, #0c0507 55%, #100308 100%);
+        flex-direction:column; overflow:hidden;
+      }
+      .mob-panel.mob-panel-show { display:flex; }
+
+      .mob-panel-hdr {
+        padding:20px 20px 14px; border-bottom:1px solid var(--glass-bd);
+        flex-shrink:0;
+        background:rgba(10,4,6,.6);
+        backdrop-filter:blur(16px);
+      }
+      .mob-panel-title {
+        font-size:20px; font-weight:800; letter-spacing:-.5px;
+        background:linear-gradient(120deg,#fff,var(--amber));
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+        background-clip:text;
+      }
+      .mob-panel-body {
+        flex:1; overflow-y:auto; padding:16px;
+        scrollbar-width:thin;
+        scrollbar-color:rgba(255,107,53,.2) transparent;
+      }
+
+      /* ── Loading Overlay ────────────────────────────── */
+      .mob-overlay {
+        position:fixed; inset:0; bottom:var(--nb); z-index:400;
+        background:rgba(12,5,7,.72);
+        backdrop-filter:blur(6px);
+        display:none; align-items:center; justify-content:center;
+      }
+      .mob-overlay.mob-overlay-show { display:flex; }
     }
 
+    /* ── DESKTOP: hide mobile elements ───────────────── */
     @media(min-width:769px){
-      .sheet-handle { display:none; }
-      .sheet-fab    { display:none; }
+      .bottom-nav  { display:none !important; }
+      .mob-fab     { display:none !important; }
+      .mob-sheet   { display:none !important; }
+      .mob-panel   { display:none !important; }
+      .mob-overlay { display:none !important; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── SIDEBAR / BOTTOM SHEET ────────────────────── -->
+<!-- ── SIDEBAR (desktop only) ────────────────────── -->
 <aside class="sidebar" id="sheet">
-  <div class="sheet-handle" id="sheet-handle">
-    <div class="sheet-handle-bar"></div>
-  </div>
   <div class="hd">
     <div class="logo">
       <div class="logo-ic">⬡</div>
@@ -459,9 +505,9 @@
     <div>
       <div class="lbl">Mode de transport</div>
       <div class="modes">
-        <button class="mode-btn on" id="mode-bike"   onclick="setMode('bike')">🚲 Vélo</button>
-        <button class="mode-btn"    id="mode-metro"  onclick="setMode('metro')">🚇 Métro</button>
-        <button class="mode-btn"    id="mode-both"   onclick="setMode('both')">⚖️ Combiné</button>
+        <button class="mode-btn on" id="mode-bike"  onclick="setMode('bike')">🚲 Vélo</button>
+        <button class="mode-btn"   id="mode-metro" onclick="setMode('metro')">🚇 Métro</button>
+        <button class="mode-btn"   id="mode-both"  onclick="setMode('both')">⚖️ Combiné</button>
       </div>
     </div>
 
@@ -484,8 +530,8 @@
         <div>
           <label class="il">Adresse de départ</label>
           <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
-            oninput="onAddrInput(this.value)"
-            onkeydown="onAddrKey(event)"
+            oninput="onAddrInput(this)"
+            onkeydown="onAddrKey(event,'desktop')"
             onblur="setTimeout(closeAC, 180)" />
         </div>
         <button class="btn-add" onclick="addMember()">+ Ajouter</button>
@@ -516,17 +562,147 @@
 </aside>
 
 <!-- ── MAP ───────────────────────────────────────── -->
-<!-- Autocomplete dropdown — in body to escape sidebar stacking context -->
+<!-- Autocomplete dropdown — in body to escape stacking context -->
 <div class="ac-list" id="ac-list"></div>
-
-<!-- FAB mobile -->
-<button class="sheet-fab" id="sheet-fab" onclick="toggleSheet()" aria-label="Ouvrir le panneau">👥</button>
 
 <div id="map-wrap">
   <div id="map"></div>
   <div class="map-legend" id="legend">
     <div class="ml-title">Équipe</div>
     <div id="legend-body"></div>
+  </div>
+</div>
+
+<!-- ── MOBILE: Bottom Navbar ─────────────────────── -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="nb-btn nb-active" id="nb-carte" onclick="mobSetTab('carte')">
+    <div class="nb-ic">🗺️</div>
+    <div class="nb-lbl">Carte</div>
+  </button>
+  <button class="nb-btn" id="nb-addrs" onclick="mobSetTab('addrs')">
+    <div class="nb-ic">📍</div>
+    <div class="nb-lbl">Adresses</div>
+  </button>
+  <button class="nb-btn" id="nb-set" onclick="mobSetTab('settings')">
+    <div class="nb-ic">⚙️</div>
+    <div class="nb-lbl">Paramètres</div>
+  </button>
+</nav>
+
+<!-- ── MOBILE: "+" FAB ───────────────────────────── -->
+<button class="mob-fab" id="mob-fab" onclick="mobOpenAdd()" aria-label="Ajouter une adresse">+</button>
+
+<!-- ── MOBILE: Add bottom sheet ──────────────────── -->
+<div class="mob-sheet" id="mob-add-sheet">
+  <div class="mob-sh-handle" id="mob-add-handle"><div class="mob-sh-bar"></div></div>
+  <div class="mob-sh-hdr">
+    <span class="mob-sh-title">Mes adresses</span>
+    <button class="mob-sh-close" onclick="mobCloseAdd()">✕</button>
+  </div>
+  <div class="mob-sh-inner">
+    <!-- Add form -->
+    <div class="form" style="margin-bottom:16px;margin-top:14px">
+      <div>
+        <label class="il">Prénom / Identifiant</label>
+        <input class="gi" id="mob-i-name" placeholder="ex : Marie" autocomplete="off"
+          onkeydown="if(event.key==='Enter') document.getElementById('mob-i-addr').focus()" />
+      </div>
+      <div>
+        <label class="il">Adresse de départ</label>
+        <input class="gi" id="mob-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+          oninput="onAddrInput(this)"
+          onkeydown="onAddrKey(event,'mob')"
+          onblur="setTimeout(closeAC, 180)" />
+      </div>
+      <button class="btn-add" onclick="mobAddMember()">+ Ajouter</button>
+    </div>
+    <!-- Team list -->
+    <div class="lbl" style="margin-bottom:8px">Équipe — <span id="mob-cnt">0</span> personne(s)</div>
+    <div id="mob-team-list" class="team-list" style="margin-bottom:16px">
+      <div class="empty">Aucune adresse ajoutée</div>
+    </div>
+    <!-- Find button -->
+    <button class="btn-primary" id="mob-btn-find" onclick="runFind()" disabled style="margin-bottom:4px">
+      🎯 Trouver le point optimal
+    </button>
+  </div>
+</div>
+
+<!-- ── MOBILE: Results bottom sheet ──────────────── -->
+<div class="mob-sheet mob-sheet-short" id="mob-res-sheet">
+  <div class="mob-sh-handle" id="mob-res-handle"><div class="mob-sh-bar"></div></div>
+  <div class="mob-sh-hdr">
+    <span class="mob-sh-title">Points de rencontre</span>
+    <button class="mob-sh-close" onclick="mobCloseRes()">✕</button>
+  </div>
+  <div class="mob-sh-inner">
+    <div id="mob-res-list" style="display:flex;flex-direction:column;gap:9px;padding:14px 0 4px"></div>
+  </div>
+</div>
+
+<!-- ── MOBILE: Loading overlay ───────────────────── -->
+<div class="mob-overlay" id="mob-overlay">
+  <div class="card ld-card" style="width:220px">
+    <div class="spinner"></div>
+    <div class="ld-main" id="mob-ld-main">Géolocalisation…</div>
+    <div class="ld-sub"  id="mob-ld-sub"></div>
+  </div>
+</div>
+
+<!-- ── MOBILE: Addresses tab panel ───────────────── -->
+<div class="mob-panel" id="mob-panel-addrs">
+  <div class="mob-panel-hdr">
+    <div class="mob-panel-title">Adresses</div>
+  </div>
+  <div class="mob-panel-body">
+    <div class="card" style="margin-bottom:16px">
+      <div class="lbl" style="margin-bottom:12px">Ajouter une adresse</div>
+      <div class="form">
+        <div>
+          <label class="il">Prénom / Identifiant</label>
+          <input class="gi" id="panel-i-name" placeholder="ex : Marie" autocomplete="off"
+            onkeydown="if(event.key==='Enter') document.getElementById('panel-i-addr').focus()" />
+        </div>
+        <div>
+          <label class="il">Adresse de départ</label>
+          <input class="gi" id="panel-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+            oninput="onAddrInput(this)"
+            onkeydown="onAddrKey(event,'panel')"
+            onblur="setTimeout(closeAC, 180)" />
+        </div>
+        <button class="btn-add" onclick="panelAddMember()">+ Ajouter</button>
+      </div>
+    </div>
+    <div class="lbl" style="margin-bottom:8px">Équipe — <span id="panel-cnt">0</span> personne(s)</div>
+    <div id="panel-team-list" class="team-list">
+      <div class="empty">Aucune adresse ajoutée</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MOBILE: Settings tab panel ────────────────── -->
+<div class="mob-panel" id="mob-panel-settings">
+  <div class="mob-panel-hdr">
+    <div class="mob-panel-title">Paramètres</div>
+  </div>
+  <div class="mob-panel-body">
+    <div style="margin-bottom:20px">
+      <div class="lbl" style="margin-bottom:10px">Mode de transport</div>
+      <div class="modes">
+        <button class="mode-btn on" id="set-mode-bike"  onclick="setMode('bike')">🚲 Vélo</button>
+        <button class="mode-btn"   id="set-mode-metro" onclick="setMode('metro')">🚇 Métro</button>
+        <button class="mode-btn"   id="set-mode-both"  onclick="setMode('both')">⚖️ Combiné</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="lbl" style="margin-bottom:8px">À propos</div>
+      <p style="font-size:12.5px;color:var(--txt2);line-height:1.7">
+        <strong style="color:var(--txt)">Mitmi Paris</strong> calcule le point de rencontre géographiquement optimal à Paris en minimisant les temps de trajet de chaque participant.
+      </p>
+      <p style="font-size:11.5px;color:var(--txt3);line-height:1.6;margin-top:8px">
+        Sources : OpenStreetMap, CARTO, OSRM, Overpass API, Base Adresse Nationale.
+      </p>
+    </div>
   </div>
 </div>
 
@@ -537,8 +713,8 @@ const S = {
   mode: 'bike',
   results: [],
   activeIdx: 0,
-  mMarkers: [],      // member markers
-  rMarkers: [],      // result markers
+  mMarkers: [],
+  rMarkers: [],
 };
 
 const COLORS = [
@@ -572,30 +748,23 @@ fetch('https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/arrondissemen
             text-shadow:0 1px 4px rgba(0,0,0,.8);">${num}e</div>`,
           className:'', iconAnchor:[10,8]
         });
-        // Place label at centroid
         const center = layer.getBounds().getCenter();
         const lbl = L.marker(center, { icon:label, interactive:false, zIndexOffset:-500 });
-
-        layer.on('mouseover', () => {
-          layer.setStyle(STYLE_HOVER);
-          lbl.addTo(map);
-        });
-        layer.on('mouseout', () => {
-          layer.setStyle(STYLE_DEFAULT);
-          map.removeLayer(lbl);
-        });
+        layer.on('mouseover', () => { layer.setStyle(STYLE_HOVER); lbl.addTo(map); });
+        layer.on('mouseout',  () => { layer.setStyle(STYLE_DEFAULT); map.removeLayer(lbl); });
       }
     }).addTo(map);
-    // Push below member/result markers
     arroLayer.bringToBack();
   })
-  .catch(() => {}); // silently fail if offline
+  .catch(() => {});
 
 // ── MODE ───────────────────────────────────────────
 function setMode(m) {
   S.mode = m;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('on'));
-  document.getElementById('mode-'+m).classList.add('on');
+  ['bike','metro','both'].forEach(mode => {
+    document.getElementById('mode-'+mode)?.classList.toggle('on', mode === m);
+    document.getElementById('set-mode-'+mode)?.classList.toggle('on', mode === m);
+  });
 }
 
 // ── MEMBER MANAGEMENT ──────────────────────────────
@@ -603,22 +772,54 @@ function addMember() {
   const n = document.getElementById('i-name').value.trim();
   const a = document.getElementById('i-addr').value.trim();
   if (!n || !a) { notify('Veuillez remplir le nom et l\'adresse.', 'error'); return; }
-  S.members.push({ id:Date.now(), name:n, address:a, coords:null, status:'pending',
+  const coords = acState.desktop; acState.desktop = null;
+  S.members.push({ id:Date.now(), name:n, address:a,
+    coords:coords||null, status:coords?'geocoded':'pending',
     color: COLORS[S.members.length % COLORS.length] });
   document.getElementById('i-name').value = '';
   document.getElementById('i-addr').value = '';
   document.getElementById('i-name').focus();
-  renderTeam(); updateBtn();
+  renderTeam(); renderMobTeam(); updateBtn();
+}
+
+function mobAddMember() {
+  const n = document.getElementById('mob-i-name').value.trim();
+  const a = document.getElementById('mob-i-addr').value.trim();
+  if (!n || !a) { notify('Veuillez remplir le nom et l\'adresse.', 'error'); return; }
+  const coords = acState.mob; acState.mob = null;
+  S.members.push({ id:Date.now(), name:n, address:a,
+    coords:coords||null, status:coords?'geocoded':'pending',
+    color: COLORS[S.members.length % COLORS.length] });
+  document.getElementById('mob-i-name').value = '';
+  document.getElementById('mob-i-addr').value = '';
+  renderTeam(); renderMobTeam(); updateBtn();
+}
+
+function panelAddMember() {
+  const n = document.getElementById('panel-i-name').value.trim();
+  const a = document.getElementById('panel-i-addr').value.trim();
+  if (!n || !a) { notify('Veuillez remplir le nom et l\'adresse.', 'error'); return; }
+  const coords = acState.panel; acState.panel = null;
+  S.members.push({ id:Date.now(), name:n, address:a,
+    coords:coords||null, status:coords?'geocoded':'pending',
+    color: COLORS[S.members.length % COLORS.length] });
+  document.getElementById('panel-i-name').value = '';
+  document.getElementById('panel-i-addr').value = '';
+  renderTeam(); renderMobTeam(); updateBtn();
 }
 
 function removeMember(id) {
   S.members = S.members.filter(m => m.id !== id);
-  renderTeam(); updateBtn(); redrawMemberMarkers();
-  if (S.members.length < 2) { document.getElementById('results').style.display='none'; clearRMarkers(); }
+  renderTeam(); renderMobTeam(); updateBtn(); redrawMemberMarkers();
+  if (S.members.length < 2) {
+    document.getElementById('results').style.display = 'none';
+    clearRMarkers(); mobCloseRes();
+  }
 }
 
 function renderTeam() {
   const el = document.getElementById('team-list');
+  if (!el) return;
   document.getElementById('cnt').textContent = S.members.length;
   if (!S.members.length) { el.innerHTML='<div class="empty">Ajoutez des collaborateurs pour commencer</div>'; hideLegend(); return; }
   el.innerHTML = S.members.map(m => `
@@ -633,10 +834,41 @@ function renderTeam() {
     </div>`).join('');
 }
 
-function updateBtn() {
-  document.getElementById('btn-find').disabled = S.members.length < 2;
+function renderMobTeam() {
+  const cnt = S.members.length;
+  const el_mob_cnt   = document.getElementById('mob-cnt');
+  const el_panel_cnt = document.getElementById('panel-cnt');
+  if (el_mob_cnt)   el_mob_cnt.textContent   = cnt;
+  if (el_panel_cnt) el_panel_cnt.textContent = cnt;
+
+  const html = cnt
+    ? S.members.map(m => `
+      <div class="mbr ${m.status}">
+        <div class="av" style="background:linear-gradient(135deg,${m.color},${m.color}aa)">${esc(m.name)[0].toUpperCase()}</div>
+        <div class="mbr-info">
+          <div class="mbr-name">${esc(m.name)}</div>
+          <div class="mbr-addr">${esc(m.address)}</div>
+        </div>
+        <div class="st ${m.status}"></div>
+        <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">✕</button>
+      </div>`).join('')
+    : '<div class="empty">Aucune adresse ajoutée</div>';
+
+  const mobList   = document.getElementById('mob-team-list');
+  const panelList = document.getElementById('panel-team-list');
+  if (mobList)   mobList.innerHTML   = html;
+  if (panelList) panelList.innerHTML = html;
+
+  const mobBtn = document.getElementById('mob-btn-find');
+  if (mobBtn) mobBtn.disabled = cnt < 2;
 }
 
+function updateBtn() {
+  const b1 = document.getElementById('btn-find');
+  const b2 = document.getElementById('mob-btn-find');
+  if (b1) b1.disabled = S.members.length < 2;
+  if (b2) b2.disabled = S.members.length < 2;
+}
 
 // ── GEOCODING ──────────────────────────────────────
 let lastGeo = 0;
@@ -681,7 +913,7 @@ async function osrmTable(sources, dests) {
   const r = await fetch(url, { signal:AbortSignal.timeout(12000) });
   const d = await r.json();
   if (d.code !== 'Ok') throw new Error(d.message);
-  return d.durations; // [src][dst] in seconds, null if unreachable
+  return d.durations;
 }
 
 // ── CANDIDATES GRID ────────────────────────────────
@@ -695,10 +927,10 @@ function makeCandidates(members) {
   const rl = Math.max(0.022, Math.min(0.075, dlat * 0.62));
   const rlo= Math.max(0.032, Math.min(0.10,  dlon * 0.62));
   const PARIS = { minLat:48.815, maxLat:48.905, minLon:2.225, maxLon:2.47 };
-  const cands = [], S = 5;
-  for (let i=0;i<S;i++) for (let j=0;j<S;j++) {
-    const lat = clat - rl + (2*rl*i/(S-1));
-    const lon = clon - rlo + (2*rlo*j/(S-1));
+  const cands = [], G = 5;
+  for (let i=0;i<G;i++) for (let j=0;j<G;j++) {
+    const lat = clat - rl + (2*rl*i/(G-1));
+    const lon = clon - rlo + (2*rlo*j/(G-1));
     if (lat>=PARIS.minLat && lat<=PARIS.maxLat && lon>=PARIS.minLon && lon<=PARIS.maxLon)
       cands.push({lat,lon});
   }
@@ -714,7 +946,7 @@ function hav(a, b) {
   const x = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLon/2)**2;
   return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
-function metroEst(km) { return (km/21)*60 + 8; } // 21 km/h avg + 8 min overhead
+function metroEst(km) { return (km/21)*60 + 8; }
 
 // ── SCORING ────────────────────────────────────────
 function score(bikeS, metroMin) {
@@ -745,10 +977,22 @@ async function venues(lat, lon) {
 // ── MAIN FIND ──────────────────────────────────────
 async function runFind() {
   if (S.members.length < 2) return;
-  const btnEl = document.getElementById('btn-find');
-  const ldEl  = document.getElementById('loading');
-  const resEl = document.getElementById('results');
-  btnEl.style.display='none'; ldEl.style.display='block'; resEl.style.display='none';
+
+  const isMob = window.innerWidth <= 768;
+  const btnEl      = document.getElementById('btn-find');
+  const ldEl       = document.getElementById('loading');
+  const resEl      = document.getElementById('results');
+  const mobBtn     = document.getElementById('mob-btn-find');
+  const mobOverlay = document.getElementById('mob-overlay');
+
+  if (isMob) {
+    mobCloseAdd();
+    mobOverlay?.classList.add('mob-overlay-show');
+    if (mobBtn) mobBtn.disabled = true;
+  }
+  if (btnEl) btnEl.style.display = 'none';
+  if (ldEl)  ldEl.style.display  = 'block';
+  if (resEl) resEl.style.display = 'none';
   clearRMarkers();
 
   try {
@@ -758,7 +1002,7 @@ async function runFind() {
       const m = S.members[i];
       setLd('Géolocalisation des adresses…', `${m.name} (${i+1}/${S.members.length})`);
       if (m.coords) {
-        setStatus(m.id, 'geocoded'); // already geocoded via autocomplete
+        setStatus(m.id, 'geocoded');
       } else {
         setStatus(m.id, 'loading');
         try {
@@ -805,68 +1049,90 @@ async function runFind() {
     }
 
     S.results = scored; S.activeIdx = 0;
-    ldEl.style.display='none'; btnEl.style.display='flex'; resEl.style.display='block';
+
+    if (isMob) {
+      mobOverlay?.classList.remove('mob-overlay-show');
+      renderMobResults();
+      document.getElementById('mob-res-sheet')?.classList.add('mob-open');
+      if (mobBtn) mobBtn.disabled = false;
+    }
+    if (ldEl) ldEl.style.display = 'none';
+    if (btnEl) btnEl.style.display = 'flex';
+    if (resEl) resEl.style.display = 'block';
     renderResults(); addResultMarkers();
     if (scored.length) map.setView([scored[0].c.lat, scored[0].c.lon], 14);
 
   } catch(e) {
-    ldEl.style.display='none'; btnEl.style.display='flex';
+    if (isMob) mobOverlay?.classList.remove('mob-overlay-show');
+    if (ldEl) ldEl.style.display = 'none';
+    if (btnEl) btnEl.style.display = 'flex';
+    if (mobBtn) mobBtn.disabled = S.members.length < 2;
     notify(e.message || 'Une erreur est survenue.', 'error');
   }
 }
 
 // ── RENDER RESULTS ─────────────────────────────────
-function renderResults() {
-  const globalMax = Math.max(...S.results.flatMap(r => r.bikeMin));
+function buildResultHTML(r, i, globalMax, activeIdx) {
+  const avgBk  = Math.round(r.bikeMin.reduce((a,b)=>a+b,0)/r.bikeMin.length);
+  const maxBk  = Math.max(...r.bikeMin);
+  const minBk  = Math.min(...r.bikeMin);
+  const spread = maxBk - minBk;
+  const isWin  = i === 0;
+  const isOn   = i === activeIdx;
 
-  document.getElementById('res-list').innerHTML = S.results.map((r, i) => {
-    const avgBk  = Math.round(r.bikeMin.reduce((a,b)=>a+b,0)/r.bikeMin.length);
-    const maxBk  = Math.max(...r.bikeMin);
-    const minBk  = Math.min(...r.bikeMin);
-    const spread = maxBk - minBk;
-    const isWin  = i === 0;
-    const isOn   = i === S.activeIdx;
+  const header = isWin
+    ? `<div class="winner-tag">⭐ Point optimal recommandé</div>`
+    : `<div class="rc-head"><div class="rc-badge">${i+1}</div><span class="rc-lbl">Alternative ${i}</span></div>`;
 
-    const header = isWin
-      ? `<div class="winner-tag">⭐ Point optimal recommandé</div>`
-      : `<div class="rc-head"><div class="rc-badge">${i+1}</div><span class="rc-lbl">Alternative ${i}</span></div>`;
-
-    const bars = r.vm.map((m,k) => {
-      const bk  = r.bikeMin[k];
-      const mt  = r.metroMin[k];
-      const pct = Math.round((bk / globalMax) * 100);
-      const col = bk <= avgBk ? '#4ECDC4' : bk <= avgBk*1.35 ? '#FFB347' : '#FF6B35';
-      return `<div class="tt-bar-row">
-        <div class="tt-bar-hd">
-          <div class="tt-bar-nm"><div class="tt-dot" style="background:${m.color}"></div>${esc(m.name)}</div>
-          <div class="tt-bar-vs">
-            <span class="bdg bk">🚲 ${bk}min</span>
-            <span class="bdg mt">🚇 ~${mt}min</span>
-          </div>
+  const bars = r.vm.map((m,k) => {
+    const bk  = r.bikeMin[k];
+    const mt  = r.metroMin[k];
+    const pct = Math.round((bk / globalMax) * 100);
+    const col = bk <= avgBk ? '#4ECDC4' : bk <= avgBk*1.35 ? '#FFB347' : '#FF6B35';
+    return `<div class="tt-bar-row">
+      <div class="tt-bar-hd">
+        <div class="tt-bar-nm"><div class="tt-dot" style="background:${m.color}"></div>${esc(m.name)}</div>
+        <div class="tt-bar-vs">
+          <span class="bdg bk">🚲 ${bk}min</span>
+          <span class="bdg mt">🚇 ~${mt}min</span>
         </div>
-        <div class="tt-bar-bg"><div class="tt-bar-fg" style="width:${pct}%;background:${col}"></div></div>
-      </div>`;
-    }).join('');
-
-    const why = (isWin || isOn) ? `<div class="why-block">${buildWhyText(r, i, avgBk, maxBk, spread)}</div>` : '';
-
-    const venueHtml = r.venues.length ? `
-      <div class="venues-sep">
-        <div class="venues-lbl">À proximité</div>
-        <div class="chips">${r.venues.map(v=>`<span class="chip">${venueEmoji(v.type)} ${esc(v.name)}</span>`).join('')}</div>
-      </div>` : '';
-
-    return `<div class="card res-card ${isOn?'on':''} ${isWin?'winner':''}" onclick="selectResult(${i})">
-      ${header}
-      <div class="rc-loc">${esc(r.loc)}</div>
-      <div class="score-pills">
-        <div class="score-pill">⏱ Moy. ${avgBk} min</div>
-        <div class="score-pill">📍 Max ${maxBk} min</div>
-        <div class="score-pill">⚖️ Écart ${spread} min</div>
       </div>
-      ${bars}${why}${venueHtml}
+      <div class="tt-bar-bg"><div class="tt-bar-fg" style="width:${pct}%;background:${col}"></div></div>
     </div>`;
   }).join('');
+
+  const why = (isWin || isOn) ? `<div class="why-block">${buildWhyText(r, i, avgBk, maxBk, spread)}</div>` : '';
+
+  const venueHtml = r.venues.length ? `
+    <div class="venues-sep">
+      <div class="venues-lbl">À proximité</div>
+      <div class="chips">${r.venues.map(v=>`<span class="chip">${venueEmoji(v.type)} ${esc(v.name)}</span>`).join('')}</div>
+    </div>` : '';
+
+  return `<div class="card res-card ${isOn?'on':''} ${isWin?'winner':''}" onclick="selectResult(${i})">
+    ${header}
+    <div class="rc-loc">${esc(r.loc)}</div>
+    <div class="score-pills">
+      <div class="score-pill">⏱ Moy. ${avgBk} min</div>
+      <div class="score-pill">📍 Max ${maxBk} min</div>
+      <div class="score-pill">⚖️ Écart ${spread} min</div>
+    </div>
+    ${bars}${why}${venueHtml}
+  </div>`;
+}
+
+function renderResults() {
+  const el = document.getElementById('res-list');
+  if (!el || !S.results.length) return;
+  const globalMax = Math.max(...S.results.flatMap(r => r.bikeMin));
+  el.innerHTML = S.results.map((r, i) => buildResultHTML(r, i, globalMax, S.activeIdx)).join('');
+}
+
+function renderMobResults() {
+  const el = document.getElementById('mob-res-list');
+  if (!el || !S.results.length) return;
+  const globalMax = Math.max(...S.results.flatMap(r => r.bikeMin));
+  el.innerHTML = S.results.map((r, i) => buildResultHTML(r, i, globalMax, S.activeIdx)).join('');
 }
 
 function buildWhyText(r, idx, avgBk, maxBk, spread) {
@@ -893,7 +1159,9 @@ function venueEmoji(t) { return {cafe:'☕',restaurant:'🍽️',bar:'🍷',cowo
 
 function selectResult(i) {
   S.activeIdx = i;
-  renderResults(); addResultMarkers();
+  renderResults();
+  renderMobResults();
+  addResultMarkers();
   const r = S.results[i];
   map.setView([r.c.lat, r.c.lon], 15);
 }
@@ -935,7 +1203,6 @@ function addResultMarkers() {
         <path d="M20 0C9 0 0 9 0 20C0 34 20 51 20 51C20 51 40 34 40 20C40 9 31 0 20 0Z" fill="url(#pg${i})"/>
         ${active?'<circle cx="20" cy="20" r="16" fill="rgba(255,255,255,.12)"/>':''}
         <text x="20" y="25" text-anchor="middle" fill="white" font-size="${active?'14':'11'}" font-weight="700" font-family="Inter,sans-serif">${i+1}</text>
-        ${active?`<filter id="glow${i}"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`:''}
       </svg>`,
       className:'', iconSize:[sz,Math.round(sz*1.28)], iconAnchor:[sz/2,Math.round(sz*1.28)]
     });
@@ -960,8 +1227,14 @@ function updateLegend(vm) {
 function hideLegend() { document.getElementById('legend').style.display='none'; }
 
 // ── HELPERS ────────────────────────────────────────
-function setLd(m,s){ document.getElementById('ld-main').textContent=m; document.getElementById('ld-sub').textContent=s; }
-function setStatus(id,st){ const m=S.members.find(m=>m.id===id); if(m){m.status=st;renderTeam();} }
+function setLd(m,s) {
+  ['ld-main','mob-ld-main'].forEach(id => { const e=document.getElementById(id); if(e) e.textContent=m; });
+  ['ld-sub','mob-ld-sub'].forEach(id => { const e=document.getElementById(id); if(e) e.textContent=s; });
+}
+function setStatus(id,st) {
+  const m=S.members.find(m=>m.id===id);
+  if(m){ m.status=st; renderTeam(); renderMobTeam(); }
+}
 function notify(msg,type='info'){
   const el=document.createElement('div'); el.className=`notif ${type}`; el.textContent=msg;
   document.body.appendChild(el); setTimeout(()=>el.remove(),4000);
@@ -970,16 +1243,21 @@ function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
 // ── AUTOCOMPLETE (BAN API) ─────────────────────────
-let acTimer = null, acItems = [], acIdx = -1, acCoords = null;
+// Per-source coords: acState.desktop / acState.mob / acState.panel
+const acState = { desktop:null, mob:null, panel:null };
+let acTimer = null, acItems = [], acIdx = -1, acActiveInput = null;
 
-function onAddrInput(val) {
-  acCoords = null;
+function onAddrInput(inputEl) {
+  const source = inputEl.id === 'i-addr' ? 'desktop'
+               : inputEl.id === 'mob-i-addr' ? 'mob' : 'panel';
+  acState[source] = null;
+  acActiveInput = inputEl;
   clearTimeout(acTimer);
-  if (val.length < 3) { closeAC(); return; }
-  acTimer = setTimeout(() => searchBAN(val), 220);
+  if (inputEl.value.length < 3) { closeAC(); return; }
+  acTimer = setTimeout(() => searchBAN(inputEl.value, source), 220);
 }
 
-async function searchBAN(q) {
+async function searchBAN(q, source) {
   try {
     const r = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&limit=6&autocomplete=1`);
     const d = await r.json();
@@ -989,44 +1267,45 @@ async function searchBAN(q) {
       type:  f.properties.type,
       lat:   f.geometry.coordinates[1],
       lon:   f.geometry.coordinates[0],
+      source,
     }));
     renderAC();
   } catch { closeAC(); }
 }
 
 function renderAC() {
-  const list  = document.getElementById('ac-list');
-  const input = document.getElementById('i-addr');
-  if (!acItems.length) { closeAC(); return; }
+  const list = document.getElementById('ac-list');
+  if (!acItems.length || !acActiveInput) { closeAC(); return; }
   acIdx = -1;
   list.innerHTML = acItems.map((it, i) => `
     <div class="ac-item" id="ac-${i}" onmousedown="pickAC(${i})">
       <div class="ac-main">${esc(it.label)}</div>
       <div class="ac-sub">${typeLabel(it.type)}</div>
     </div>`).join('');
-  // Position relative to input
-  const r = input.getBoundingClientRect();
+  const r = acActiveInput.getBoundingClientRect();
   list.style.top   = (r.bottom + 4) + 'px';
   list.style.left  = r.left + 'px';
   list.style.width = r.width + 'px';
   list.classList.add('open');
 }
 
-function onAddrKey(e) {
+function onAddrKey(e, source) {
   const list = document.getElementById('ac-list');
   const open = list.classList.contains('open');
   if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    if (!open) return;
-    acIdx = Math.min(acIdx + 1, acItems.length - 1);
-    highlightAC();
+    e.preventDefault(); if (!open) return;
+    acIdx = Math.min(acIdx + 1, acItems.length - 1); highlightAC();
   } else if (e.key === 'ArrowUp') {
     e.preventDefault();
-    acIdx = Math.max(acIdx - 1, -1);
-    highlightAC();
+    acIdx = Math.max(acIdx - 1, -1); highlightAC();
   } else if (e.key === 'Enter') {
     if (open && acIdx >= 0) { e.preventDefault(); pickAC(acIdx); }
-    else { closeAC(); addMember(); }
+    else {
+      closeAC();
+      if (source === 'desktop') addMember();
+      else if (source === 'mob') mobAddMember();
+      else panelAddMember();
+    }
   } else if (e.key === 'Escape') {
     closeAC();
   }
@@ -1038,8 +1317,8 @@ function highlightAC() {
 
 function pickAC(i) {
   const it = acItems[i];
-  document.getElementById('i-addr').value = it.label;
-  acCoords = { lat: it.lat, lon: it.lon };
+  if (acActiveInput) acActiveInput.value = it.label;
+  acState[it.source] = { lat: it.lat, lon: it.lon };
   closeAC();
 }
 
@@ -1052,87 +1331,84 @@ function typeLabel(t) {
   return { housenumber:'Adresse', street:'Rue / voie', locality:'Lieu-dit', municipality:'Commune' }[t] || 'Adresse';
 }
 
-// Patch addMember to capture pre-geocoded coords
-const _origAddMember = addMember;
-addMember = function() {
-  const savedCoords = acCoords;
-  acCoords = null;
-  _origAddMember();
-  // If coords were captured from autocomplete, attach them to the last member
-  if (savedCoords && S.members.length) {
-    const m = S.members[S.members.length - 1];
-    m.coords = savedCoords;
-    m.status = 'geocoded';
-    renderTeam();
-  }
-};
-
-// Enter key shortcuts
+// Enter key shortcut on desktop name input
 document.getElementById('i-name').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('i-addr').focus(); });
 
-// ── MOBILE BOTTOM SHEET ────────────────────────────
+// ── MOBILE NAVIGATION ──────────────────────────────
+function mobSetTab(tab) {
+  ['carte','addrs','set'].forEach(t => {
+    document.getElementById('nb-'+t)?.classList.toggle('nb-active', t === tab);
+  });
+  document.getElementById('mob-panel-addrs')?.classList.toggle('mob-panel-show', tab === 'addrs');
+  document.getElementById('mob-panel-settings')?.classList.toggle('mob-panel-show', tab === 'settings');
+
+  const fab = document.getElementById('mob-fab');
+  if (fab) fab.style.display = tab === 'carte' ? 'flex' : 'none';
+
+  if (tab !== 'carte') { mobCloseAdd(); }
+
+  renderMobTeam();
+}
+
+function mobOpenAdd() {
+  document.getElementById('mob-add-sheet')?.classList.add('mob-open');
+  renderMobTeam();
+}
+
+function mobCloseAdd() {
+  document.getElementById('mob-add-sheet')?.classList.remove('mob-open');
+}
+
+function mobCloseRes() {
+  document.getElementById('mob-res-sheet')?.classList.remove('mob-open');
+}
+
+// ── MOBILE SHEET DRAG ──────────────────────────────
 (function(){
-  const sheet   = document.getElementById('sheet');
-  const handle  = document.getElementById('sheet-handle');
-  const fab     = document.getElementById('sheet-fab');
-  if (!sheet || !handle) return;
+  ['mob-add-sheet','mob-res-sheet'].forEach(sheetId => {
+    const sheet  = document.getElementById(sheetId);
+    const handle = sheet?.querySelector('.mob-sh-handle');
+    if (!sheet || !handle) return;
 
-  // States: 'collapsed' | 'mid' | 'expanded'
-  let sheetState = 'collapsed';
+    let startY = 0, startTrans = 0, dragging = false;
 
-  function applyState(s) {
-    sheetState = s;
-    sheet.classList.remove('sheet-mid','sheet-expanded');
-    if (s === 'mid')      sheet.classList.add('sheet-mid');
-    if (s === 'expanded') sheet.classList.add('sheet-expanded');
-    if (fab) fab.textContent = s === 'collapsed' ? '👥' : '✕';
-  }
+    function getY() {
+      return new DOMMatrix(window.getComputedStyle(sheet).transform).m42;
+    }
 
-  window.toggleSheet = function() {
-    applyState(sheetState === 'collapsed' ? 'mid' : 'collapsed');
-  };
+    handle.addEventListener('touchstart', e => {
+      dragging = true;
+      startY = e.touches[0].clientY;
+      startTrans = getY();
+      sheet.style.transition = 'none';
+    }, { passive:true });
 
-  // Drag logic
-  let startY = 0, startTrans = 0, dragging = false;
+    window.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const dy = e.touches[0].clientY - startY;
+      const raw = Math.max(0, startTrans + dy);
+      sheet.style.transform = `translateY(${raw}px)`;
+    }, { passive:true });
 
-  function getTranslateY() {
-    const style = window.getComputedStyle(sheet);
-    const mat   = new DOMMatrix(style.transform);
-    return mat.m42;
-  }
-
-  handle.addEventListener('touchstart', e => {
-    if (window.innerWidth > 768) return;
-    dragging  = true;
-    startY    = e.touches[0].clientY;
-    startTrans= getTranslateY();
-    sheet.style.transition = 'none';
-  }, { passive:true });
-
-  window.addEventListener('touchmove', e => {
-    if (!dragging) return;
-    const dy  = e.touches[0].clientY - startY;
-    const raw = startTrans + dy;
-    const h   = sheet.offsetHeight;
-    const clamped = Math.max(0, Math.min(h - 72, raw));
-    sheet.style.transform = `translateY(${clamped}px)`;
-  }, { passive:true });
-
-  window.addEventListener('touchend', e => {
-    if (!dragging) return;
-    dragging = false;
-    sheet.style.transition = '';
-    const cur = getTranslateY();
-    const h   = sheet.offsetHeight;
-    const pct = cur / h; // 0 = fully open, 1 = fully closed
-    if      (pct < 0.2)  applyState('expanded');
-    else if (pct < 0.65) applyState('mid');
-    else                  applyState('collapsed');
+    window.addEventListener('touchend', () => {
+      if (!dragging) return;
+      dragging = false;
+      sheet.style.transition = '';
+      const cur = getY();
+      const h = sheet.offsetHeight;
+      if (cur / h > 0.42) {
+        sheet.classList.remove('mob-open');
+        sheet.style.transform = '';
+      } else {
+        sheet.classList.add('mob-open');
+        sheet.style.transform = '';
+      }
+    });
   });
 
-  // Collapse sheet when map is tapped
+  // Tap map to close add-sheet
   document.getElementById('map')?.addEventListener('click', () => {
-    if (window.innerWidth <= 768 && sheetState !== 'collapsed') applyState('collapsed');
+    if (window.innerWidth <= 768) mobCloseAdd();
   });
 })();
 </script>
