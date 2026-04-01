@@ -427,13 +427,10 @@
         </div>
         <div>
           <label class="il">Adresse de départ</label>
-          <div class="ac-wrap">
-            <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
-              oninput="onAddrInput(this.value)"
-              onkeydown="onAddrKey(event)"
-              onblur="setTimeout(closeAC, 150)" />
-            <div class="ac-list" id="ac-list"></div>
-          </div>
+          <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+            oninput="onAddrInput(this.value)"
+            onkeydown="onAddrKey(event)"
+            onblur="setTimeout(closeAC, 180)" />
         </div>
         <button class="btn-add" onclick="addMember()">+ Ajouter</button>
       </div>
@@ -466,6 +463,9 @@
 </aside>
 
 <!-- ── MAP ───────────────────────────────────────── -->
+<!-- Autocomplete dropdown — in body to escape sidebar stacking context -->
+<div class="ac-list" id="ac-list"></div>
+
 <div id="map-wrap">
   <div id="map"></div>
   <div class="map-legend" id="legend">
