@@ -355,15 +355,28 @@
       border-top:1px solid rgba(255,135,65,.1);
     }
     .pp-action-btn {
-      flex:1; display:flex; align-items:center; justify-content:center; gap:4px;
-      padding:7px 6px; border:1px solid var(--glass-bd); border-radius:8px;
-      font-size:11px; font-weight:500; font-family:'Inter',sans-serif;
+      width:36px; height:36px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid var(--glass-bd); border-radius:9px;
       cursor:pointer; transition:all .18s; text-decoration:none;
       color:var(--txt2); background:var(--glass-bg);
     }
     .pp-action-btn:hover { background:rgba(255,107,53,.1); border-color:rgba(255,107,53,.3); color:var(--accent); }
     .pp-action-btn.pp-share { background:rgba(255,107,53,.07); border-color:rgba(255,107,53,.2); color:var(--accent); }
     .pp-action-btn.pp-share:hover { background:rgba(255,107,53,.18); }
+
+    /* ── ADDRESS FIELD WITH LOC BUTTON ──────────────────── */
+    .addr-field-wrap { position:relative; }
+    .addr-field-wrap .gi { padding-right:38px; }
+    .loc-btn {
+      position:absolute; right:6px; top:50%; transform:translateY(-50%);
+      width:28px; height:28px; border:none; border-radius:7px;
+      background:rgba(255,107,53,.12); color:var(--accent);
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:background .15s;
+    }
+    .loc-btn:hover { background:rgba(255,107,53,.25); }
+    .loc-btn.loading { animation:pu .9s infinite; pointer-events:none; }
 
     /* ── NOTIFICATION ─────────────────────────────────── */
     .notif {
@@ -587,10 +600,15 @@
         </div>
         <div>
           <label class="il">Adresse de départ</label>
-          <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
-            oninput="onAddrInput(this)"
-            onkeydown="onAddrKey(event,'desktop')"
-            onblur="setTimeout(closeAC, 180)" />
+          <div class="addr-field-wrap">
+            <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+              oninput="onAddrInput(this)"
+              onkeydown="onAddrKey(event,'desktop')"
+              onblur="setTimeout(closeAC, 180)" />
+            <button class="loc-btn" id="loc-btn-desktop" title="Ma position" onclick="useMyLocation('desktop')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/></svg>
+            </button>
+          </div>
         </div>
         <button class="btn-add" onclick="addMember()">+ Ajouter</button>
       </div>
@@ -696,10 +714,15 @@
       </div>
       <div>
         <label class="il">Adresse de départ</label>
-        <input class="gi" id="mob-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
-          oninput="onAddrInput(this)"
-          onkeydown="onAddrKey(event,'mob')"
-          onblur="setTimeout(closeAC, 180)" />
+        <div class="addr-field-wrap">
+          <input class="gi" id="mob-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+            oninput="onAddrInput(this)"
+            onkeydown="onAddrKey(event,'mob')"
+            onblur="setTimeout(closeAC, 180)" />
+          <button class="loc-btn" id="loc-btn-mob" title="Ma position" onclick="useMyLocation('mob')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/></svg>
+          </button>
+        </div>
       </div>
       <button class="btn-add" onclick="mobAddMember()">+ Ajouter</button>
     </div>
@@ -755,10 +778,15 @@
         </div>
         <div>
           <label class="il">Adresse de départ</label>
-          <input class="gi" id="panel-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
-            oninput="onAddrInput(this)"
-            onkeydown="onAddrKey(event,'panel')"
-            onblur="setTimeout(closeAC, 180)" />
+          <div class="addr-field-wrap">
+            <input class="gi" id="panel-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+              oninput="onAddrInput(this)"
+              onkeydown="onAddrKey(event,'panel')"
+              onblur="setTimeout(closeAC, 180)" />
+            <button class="loc-btn" id="loc-btn-panel" title="Ma position" onclick="useMyLocation('panel')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/></svg>
+            </button>
+          </div>
         </div>
         <button class="btn-add" onclick="panelAddMember()">+ Ajouter</button>
       </div>
@@ -810,6 +838,43 @@ function setAppMode(mode) {
     b.classList.toggle('ms-active', b.dataset.mode === mode)
   );
   if (S.results.length) addResultMarkers();
+}
+
+// ── GEOLOCATION ────────────────────────────────────
+const SRC_IDS = {
+  desktop: { addr: 'i-addr',       name: 'i-name',       btn: 'loc-btn-desktop' },
+  mob:     { addr: 'mob-i-addr',   name: 'mob-i-name',   btn: 'loc-btn-mob'     },
+  panel:   { addr: 'panel-i-addr', name: 'panel-i-name', btn: 'loc-btn-panel'   },
+};
+
+async function useMyLocation(source) {
+  if (!navigator.geolocation) { notify('Géolocalisation non supportée', 'error'); return; }
+  const ids = SRC_IDS[source];
+  const btn = document.getElementById(ids.btn);
+  btn?.classList.add('loading');
+
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const { latitude: lat, longitude: lon } = pos.coords;
+    try {
+      const r = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}&limit=1`);
+      const d = await r.json();
+      const feat = d.features?.[0];
+      const label = feat ? feat.properties.label : `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+      document.getElementById(ids.addr).value = label;
+      acState[source] = { lat, lon };
+      // Auto-fill name if empty
+      const nameEl = document.getElementById(ids.name);
+      if (nameEl && !nameEl.value.trim()) nameEl.value = 'Moi';
+    } catch {
+      document.getElementById(ids.addr).value = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+      acState[source] = { lat, lon };
+    }
+    btn?.classList.remove('loading');
+  }, err => {
+    btn?.classList.remove('loading');
+    const msg = err.code === 1 ? 'Accès à la position refusé.' : 'Impossible d\'obtenir la position.';
+    notify(msg, 'error');
+  }, { timeout: 8000, maximumAge: 60000 });
 }
 
 function shareGmaps(lat, lon, name) {
@@ -1333,13 +1398,11 @@ function addResultMarkers() {
     const gmapsUrl = `https://maps.google.com/?q=${r.c.lat},${r.c.lon}`;
     const persoActions = appMode === 'perso' ? `
       <div class="pp-actions">
-        <a class="pp-action-btn" href="${gmapsUrl}" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Google Maps
+        <a class="pp-action-btn" href="${gmapsUrl}" target="_blank" rel="noopener" title="Ouvrir dans Google Maps">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
-        <button class="pp-action-btn pp-share" onclick="shareGmaps(${r.c.lat},${r.c.lon},'${esc(r.loc).replace(/'/g,"\\'")}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          Partager
+        <button class="pp-action-btn pp-share" onclick="shareGmaps(${r.c.lat},${r.c.lon},'${esc(r.loc).replace(/'/g,"\\'")}')") title="Partager le lien">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         </button>
       </div>` : '';
     const mk = L.marker([r.c.lat,r.c.lon],{icon:ic, zIndexOffset:active?1000:0})
@@ -1505,8 +1568,9 @@ function mobCloseRes() {
 (function(){
   ['mob-add-sheet','mob-res-sheet'].forEach(sheetId => {
     const sheet  = document.getElementById(sheetId);
-    const handle = sheet?.querySelector('.mob-sh-handle');
-    if (!sheet || !handle) return;
+    if (!sheet) return;
+    // Drag zone = handle bar + header row
+    const dragZones = [sheet.querySelector('.mob-sh-handle'), sheet.querySelector('.mob-sh-hdr')].filter(Boolean);
 
     let startY = 0, startTrans = 0, dragging = false;
 
@@ -1514,12 +1578,14 @@ function mobCloseRes() {
       return new DOMMatrix(window.getComputedStyle(sheet).transform).m42;
     }
 
-    handle.addEventListener('touchstart', e => {
-      dragging = true;
-      startY = e.touches[0].clientY;
-      startTrans = getY();
-      sheet.style.transition = 'none';
-    }, { passive:true });
+    dragZones.forEach(zone => {
+      zone.addEventListener('touchstart', e => {
+        dragging = true;
+        startY = e.touches[0].clientY;
+        startTrans = getY();
+        sheet.style.transition = 'none';
+      }, { passive:true });
+    });
 
     window.addEventListener('touchmove', e => {
       if (!dragging) return;
@@ -1534,7 +1600,7 @@ function mobCloseRes() {
       sheet.style.transition = '';
       const cur = getY();
       const h = sheet.offsetHeight;
-      if (cur / h > 0.42) {
+      if (cur / h > 0.35) {
         sheet.classList.remove('mob-open');
         sheet.style.transform = '';
       } else {
