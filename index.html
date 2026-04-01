@@ -167,6 +167,21 @@
     }
     .rm-btn:hover { color:var(--accent2); }
 
+    /* ── WEIGHT STEPPER ─────────────────────────────── */
+    .wgt-ctrl { display:flex; align-items:center; gap:2px; flex-shrink:0; }
+    .wgt-btn {
+      width:20px; height:20px; border:1px solid var(--glass-bd); border-radius:5px;
+      background:var(--glass-bg); color:var(--txt3); font-size:14px; line-height:1;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all .15s; padding:0; font-family:inherit; flex-shrink:0;
+    }
+    .wgt-btn:hover { background:rgba(255,107,53,.12); border-color:rgba(255,107,53,.3); color:var(--accent); }
+    .wgt-val {
+      font-size:11px; font-weight:700; color:var(--txt3);
+      min-width:16px; text-align:center; transition:color .15s;
+    }
+    .wgt-val.hi { color:var(--accent); }
+
     .form { display:flex; flex-direction:column; gap:9px; }
     .il { font-size:11px; font-weight:500; color:var(--txt2); margin-bottom:4px; display:block; }
     .gi {
@@ -957,7 +972,7 @@ function addMember() {
   const coords = acState.desktop; acState.desktop = null;
   S.members.push({ id:Date.now(), name:n, address:a,
     coords:coords||null, status:coords?'geocoded':'pending',
-    color: COLORS[S.members.length % COLORS.length] });
+    color: COLORS[S.members.length % COLORS.length], weight:1 });
   document.getElementById('i-name').value = '';
   document.getElementById('i-addr').value = '';
   document.getElementById('i-name').focus();
@@ -971,7 +986,7 @@ function mobAddMember() {
   const coords = acState.mob; acState.mob = null;
   S.members.push({ id:Date.now(), name:n, address:a,
     coords:coords||null, status:coords?'geocoded':'pending',
-    color: COLORS[S.members.length % COLORS.length] });
+    color: COLORS[S.members.length % COLORS.length], weight:1 });
   document.getElementById('mob-i-name').value = '';
   document.getElementById('mob-i-addr').value = '';
   renderTeam(); renderMobTeam(); updateBtn();
@@ -984,10 +999,17 @@ function panelAddMember() {
   const coords = acState.panel; acState.panel = null;
   S.members.push({ id:Date.now(), name:n, address:a,
     coords:coords||null, status:coords?'geocoded':'pending',
-    color: COLORS[S.members.length % COLORS.length] });
+    color: COLORS[S.members.length % COLORS.length], weight:1 });
   document.getElementById('panel-i-name').value = '';
   document.getElementById('panel-i-addr').value = '';
   renderTeam(); renderMobTeam(); updateBtn();
+}
+
+function setWeight(id, delta) {
+  const m = S.members.find(m => m.id === id);
+  if (!m) return;
+  m.weight = Math.max(1, Math.min(5, (m.weight||1) + delta));
+  renderTeam(); renderMobTeam();
 }
 
 function removeMember(id) {
@@ -1012,6 +1034,11 @@ function renderTeam() {
         <div class="mbr-addr">${esc(m.address)}</div>
       </div>
       <div class="st ${m.status}"></div>
+      <div class="wgt-ctrl" title="Pondération">
+        <button class="wgt-btn" onclick="setWeight(${m.id},-1)">−</button>
+        <span class="wgt-val${m.weight>1?' hi':''}">×${m.weight}</span>
+        <button class="wgt-btn" onclick="setWeight(${m.id},1)">+</button>
+      </div>
       <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">✕</button>
     </div>`).join('');
 }
@@ -1032,6 +1059,11 @@ function renderMobTeam() {
           <div class="mbr-addr">${esc(m.address)}</div>
         </div>
         <div class="st ${m.status}"></div>
+        <div class="wgt-ctrl" title="Pondération">
+          <button class="wgt-btn" onclick="setWeight(${m.id},-1)">−</button>
+          <span class="wgt-val${m.weight>1?' hi':''}">×${m.weight}</span>
+          <button class="wgt-btn" onclick="setWeight(${m.id},1)">+</button>
+        </div>
         <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">✕</button>
       </div>`).join('')
     : '<div class="empty">Aucune adresse ajoutée</div>';
@@ -1105,8 +1137,10 @@ async function osrmTable(sources, dests) {
 function makeCandidates(members) {
   const coords = members.map(m => m.coords);
   const lats = coords.map(c => c.lat), lons = coords.map(c => c.lon);
-  const clat = lats.reduce((a,b)=>a+b,0)/lats.length;
-  const clon = lons.reduce((a,b)=>a+b,0)/lons.length;
+  // Weighted centroid — members with higher weight pull the center toward them
+  const totalW = members.reduce((a,m) => a + (m.weight||1), 0);
+  const clat = members.reduce((a,m) => a + m.coords.lat * (m.weight||1), 0) / totalW;
+  const clon = members.reduce((a,m) => a + m.coords.lon * (m.weight||1), 0) / totalW;
   const dlat = Math.max(...lats) - Math.min(...lats);
   const dlon = Math.max(...lons) - Math.min(...lons);
   const rl = Math.max(0.022, Math.min(0.075, dlat * 0.62));
@@ -1134,15 +1168,19 @@ function hav(a, b) {
 function metroEst(km) { return (km/21)*60 + 8; }
 
 // ── SCORING ────────────────────────────────────────
-function score(bikeS, metroMin) {
+function score(bikeS, metroMin, weights) {
   const times = S.mode==='bike'  ? bikeS.map(t=>t/60)
               : S.mode==='metro' ? metroMin
               : bikeS.map((t,i)=>Math.min(t/60, metroMin[i]));
-  const n=times.length;
-  const avg = times.reduce((a,b)=>a+b,0)/n;
-  const max = Math.max(...times);
-  const sd  = Math.sqrt(times.reduce((a,t)=>a+(t-avg)**2,0)/n);
-  return avg*0.5 + max*0.3 + sd*0.2;
+  const ws = weights || times.map(()=>1);
+  const totalW = ws.reduce((a,b)=>a+b,0);
+  // Weighted average — higher-weight members count more
+  const wavg = times.reduce((a,t,i) => a + t * ws[i], 0) / totalW;
+  // Max stays unweighted (fairness: nobody should be left too far)
+  const max  = Math.max(...times);
+  // Weighted std deviation
+  const wsd  = Math.sqrt(times.reduce((a,t,i) => a + ws[i] * (t - wavg)**2, 0) / totalW);
+  return wavg*0.5 + max*0.3 + wsd*0.2;
 }
 
 // ── OVERPASS VENUES ────────────────────────────────
@@ -1220,10 +1258,11 @@ async function runFind() {
 
     // 4 — Score
     setLd('Optimisation du point de rencontre…', '');
+    const weights = vm.map(m => m.weight||1);
     const scored = cands.map((c,j) => {
       const bikeS  = vm.map((_,i) => bikeMatrix[i]?.[j] ?? 99999);
       const metroM = vm.map(m => metroEst(hav(m.coords,c)));
-      return { c, bikeS, metroM, bikeMin:bikeS.map(t=>Math.round(t/60)), metroMin:metroM.map(Math.round), sc:score(bikeS,metroM), vm };
+      return { c, bikeS, metroM, bikeMin:bikeS.map(t=>Math.round(t/60)), metroMin:metroM.map(Math.round), sc:score(bikeS,metroM,weights), vm };
     }).sort((a,b)=>a.sc-b.sc).slice(0,3);
 
     // 5 — Enrich
@@ -1276,7 +1315,7 @@ function buildResultHTML(r, i, globalMax, activeIdx) {
     const col = bk <= avgBk ? '#4ECDC4' : bk <= avgBk*1.35 ? '#FFB347' : '#FF6B35';
     return `<div class="tt-bar-row">
       <div class="tt-bar-hd">
-        <div class="tt-bar-nm"><div class="tt-dot" style="background:${m.color}"></div>${esc(m.name)}</div>
+        <div class="tt-bar-nm"><div class="tt-dot" style="background:${m.color}"></div>${esc(m.name)}${(m.weight||1)>1?` <span style="font-size:10px;color:var(--accent);font-weight:700">×${m.weight}</span>`:''}</div>
         <div class="tt-bar-vs">
           <span class="bdg bk">🚲 ${bk}min</span>
           <span class="bdg mt">🚇 ~${mt}min</span>
