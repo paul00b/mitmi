@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "amia-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/Users/Paul/Desktop/Projets Dev/Mitmi/serve.py"],
+      "port": 3456
+    }
+  ]
+}
