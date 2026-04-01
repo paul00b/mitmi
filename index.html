@@ -359,6 +359,9 @@
       /* Legend above navbar */
       .map-legend { bottom:calc(var(--nb) + 10px); right:12px; position:fixed; }
 
+      /* SVG icons in navbar */
+      .nb-ic svg { width:22px; height:22px; display:block; }
+
       /* ── Bottom Navbar ─────────────────────────────── */
       .bottom-nav {
         display:flex;
@@ -493,7 +496,11 @@
 <aside class="sidebar" id="sheet">
   <div class="hd">
     <div class="logo">
-      <div class="logo-ic">⬡</div>
+      <div class="logo-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linejoin="round" style="width:20px;height:20px">
+          <path d="M12 2L21.5 7.5V16.5L12 22L2.5 16.5V7.5Z"/>
+        </svg>
+      </div>
       <span class="logo-tx">Mitmi Paris</span>
     </div>
     <p class="tagline">Trouvez le point de rencontre idéal pour votre équipe à Paris</p>
@@ -505,9 +512,9 @@
     <div>
       <div class="lbl">Mode de transport</div>
       <div class="modes">
-        <button class="mode-btn on" id="mode-bike"  onclick="setMode('bike')">🚲 Vélo</button>
-        <button class="mode-btn"   id="mode-metro" onclick="setMode('metro')">🚇 Métro</button>
-        <button class="mode-btn"   id="mode-both"  onclick="setMode('both')">⚖️ Combiné</button>
+        <button class="mode-btn on" id="mode-bike"  onclick="setMode('bike')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M15 6h-2l-3.5 6-2 5.5"/><path d="M12 6l2 5.5"/><path d="M5.5 17.5l4.5-5.5L12 6"/></svg> Vélo</button>
+        <button class="mode-btn"   id="mode-metro" onclick="setMode('metro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><rect x="5" y="2" width="14" height="16" rx="2"/><path d="M5 10h14"/><path d="M12 2v8"/><circle cx="8.5" cy="14.5" r="1"/><circle cx="15.5" cy="14.5" r="1"/><path d="M8 20l-2 2"/><path d="M16 20l2 2"/></svg> Métro</button>
+        <button class="mode-btn"   id="mode-both"  onclick="setMode('both')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M16 3l4 4-4 4"/><path d="M4 7h16"/><path d="M8 21l-4-4 4-4"/><path d="M20 17H4"/></svg> Combiné</button>
       </div>
     </div>
 
@@ -540,7 +547,8 @@
 
     <!-- Find -->
     <button class="btn-primary" id="btn-find" onclick="runFind()" disabled>
-      🎯 Trouver le point optimal
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+      Trouver le point optimal
     </button>
 
     <!-- Loading -->
@@ -576,15 +584,30 @@
 <!-- ── MOBILE: Bottom Navbar ─────────────────────── -->
 <nav class="bottom-nav" id="bottom-nav">
   <button class="nb-btn nb-active" id="nb-carte" onclick="mobSetTab('carte')">
-    <div class="nb-ic">🗺️</div>
+    <div class="nb-ic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+        <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+      </svg>
+    </div>
     <div class="nb-lbl">Carte</div>
   </button>
   <button class="nb-btn" id="nb-addrs" onclick="mobSetTab('addrs')">
-    <div class="nb-ic">📍</div>
+    <div class="nb-ic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+    </div>
     <div class="nb-lbl">Adresses</div>
   </button>
   <button class="nb-btn" id="nb-set" onclick="mobSetTab('settings')">
-    <div class="nb-ic">⚙️</div>
+    <div class="nb-ic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </div>
     <div class="nb-lbl">Paramètres</div>
   </button>
 </nav>
@@ -623,7 +646,8 @@
     </div>
     <!-- Find button -->
     <button class="btn-primary" id="mob-btn-find" onclick="runFind()" disabled style="margin-bottom:4px">
-      🎯 Trouver le point optimal
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+      Trouver le point optimal
     </button>
   </div>
 </div>
@@ -674,9 +698,13 @@
       </div>
     </div>
     <div class="lbl" style="margin-bottom:8px">Équipe — <span id="panel-cnt">0</span> personne(s)</div>
-    <div id="panel-team-list" class="team-list">
+    <div id="panel-team-list" class="team-list" style="margin-bottom:16px">
       <div class="empty">Aucune adresse ajoutée</div>
     </div>
+    <button class="btn-primary" id="panel-btn-find" onclick="panelFind()" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+      Trouver le point optimal
+    </button>
   </div>
 </div>
 
@@ -689,9 +717,9 @@
     <div style="margin-bottom:20px">
       <div class="lbl" style="margin-bottom:10px">Mode de transport</div>
       <div class="modes">
-        <button class="mode-btn on" id="set-mode-bike"  onclick="setMode('bike')">🚲 Vélo</button>
-        <button class="mode-btn"   id="set-mode-metro" onclick="setMode('metro')">🚇 Métro</button>
-        <button class="mode-btn"   id="set-mode-both"  onclick="setMode('both')">⚖️ Combiné</button>
+        <button class="mode-btn on" id="set-mode-bike"  onclick="setMode('bike')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M15 6h-2l-3.5 6-2 5.5"/><path d="M12 6l2 5.5"/><path d="M5.5 17.5l4.5-5.5L12 6"/></svg> Vélo</button>
+        <button class="mode-btn"   id="set-mode-metro" onclick="setMode('metro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><rect x="5" y="2" width="14" height="16" rx="2"/><path d="M5 10h14"/><path d="M12 2v8"/><circle cx="8.5" cy="14.5" r="1"/><circle cx="15.5" cy="14.5" r="1"/><path d="M8 20l-2 2"/><path d="M16 20l2 2"/></svg> Métro</button>
+        <button class="mode-btn"   id="set-mode-both"  onclick="setMode('both')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M16 3l4 4-4 4"/><path d="M4 7h16"/><path d="M8 21l-4-4 4-4"/><path d="M20 17H4"/></svg> Combiné</button>
       </div>
     </div>
     <div class="card">
@@ -859,15 +887,18 @@ function renderMobTeam() {
   if (mobList)   mobList.innerHTML   = html;
   if (panelList) panelList.innerHTML = html;
 
-  const mobBtn = document.getElementById('mob-btn-find');
-  if (mobBtn) mobBtn.disabled = cnt < 2;
+  const mobBtn   = document.getElementById('mob-btn-find');
+  const panelBtn = document.getElementById('panel-btn-find');
+  if (mobBtn)   mobBtn.disabled   = cnt < 2;
+  if (panelBtn) panelBtn.disabled = cnt < 2;
 }
 
 function updateBtn() {
-  const b1 = document.getElementById('btn-find');
-  const b2 = document.getElementById('mob-btn-find');
-  if (b1) b1.disabled = S.members.length < 2;
-  if (b2) b2.disabled = S.members.length < 2;
+  const disabled = S.members.length < 2;
+  ['btn-find','mob-btn-find','panel-btn-find'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = disabled;
+  });
 }
 
 // ── GEOCODING ──────────────────────────────────────
@@ -1333,6 +1364,12 @@ function typeLabel(t) {
 
 // Enter key shortcut on desktop name input
 document.getElementById('i-name').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('i-addr').focus(); });
+
+// ── PANEL FIND (from Adresses tab) ─────────────────
+function panelFind() {
+  if (window.innerWidth <= 768) mobSetTab('carte');
+  runFind();
+}
 
 // ── MOBILE NAVIGATION ──────────────────────────────
 function mobSetTab(tab) {
