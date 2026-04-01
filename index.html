@@ -497,6 +497,44 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:19
 }).addTo(map);
 
+// ── ARRONDISSEMENTS OVERLAY ────────────────────────
+const STYLE_DEFAULT = { color:'rgba(255,135,65,.22)', weight:1, fillColor:'transparent', fillOpacity:0 };
+const STYLE_HOVER   = { color:'rgba(255,135,65,.7)',  weight:1.5, fillColor:'#FF6B35', fillOpacity:.11 };
+
+let arroLayer = null;
+fetch('https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/arrondissements/exports/geojson?lang=fr')
+  .then(r => r.json())
+  .then(data => {
+    arroLayer = L.geoJSON(data, {
+      style: STYLE_DEFAULT,
+      onEachFeature(feature, layer) {
+        const num = feature.properties.c_ar;
+        const label = L.divIcon({
+          html: `<div style="
+            font-family:Inter,sans-serif; font-size:12px; font-weight:700;
+            color:rgba(255,185,100,.55); pointer-events:none; white-space:nowrap;
+            text-shadow:0 1px 4px rgba(0,0,0,.8);">${num}e</div>`,
+          className:'', iconAnchor:[10,8]
+        });
+        // Place label at centroid
+        const center = layer.getBounds().getCenter();
+        const lbl = L.marker(center, { icon:label, interactive:false, zIndexOffset:-500 });
+
+        layer.on('mouseover', () => {
+          layer.setStyle(STYLE_HOVER);
+          lbl.addTo(map);
+        });
+        layer.on('mouseout', () => {
+          layer.setStyle(STYLE_DEFAULT);
+          map.removeLayer(lbl);
+        });
+      }
+    }).addTo(map);
+    // Push below member/result markers
+    arroLayer.bringToBack();
+  })
+  .catch(() => {}); // silently fail if offline
+
 // ── MODE ───────────────────────────────────────────
 function setMode(m) {
   S.mode = m;
