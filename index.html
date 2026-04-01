@@ -831,6 +831,16 @@
         <button class="mode-btn"   id="set-mode-both"  onclick="setMode('both')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M16 3l4 4-4 4"/><path d="M4 7h16"/><path d="M8 21l-4-4 4-4"/><path d="M20 17H4"/></svg> Combiné</button>
       </div>
     </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="lbl" style="margin-bottom:8px">Cache &amp; mises à jour</div>
+      <p style="font-size:12px;color:var(--txt3);line-height:1.6;margin-bottom:12px">
+        Si l'app ne reflète pas les dernières modifications, vide le cache du service worker et recharge.
+      </p>
+      <button class="btn-add" id="clear-cache-btn" onclick="clearAppCache()" style="width:100%;justify-content:center;gap:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+        Vider le cache et recharger
+      </button>
+    </div>
     <div class="card">
       <div class="lbl" style="margin-bottom:8px">À propos</div>
       <p style="font-size:12.5px;color:var(--txt2);line-height:1.7">
@@ -844,6 +854,25 @@
 </div>
 
 <script>
+// ── CACHE CLEAR ────────────────────────────────────
+async function clearAppCache() {
+  const btn = document.getElementById('clear-cache-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Nettoyage…'; }
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+    notify('Cache vidé — rechargement…', 'success');
+    setTimeout(() => location.reload(true), 800);
+  } catch(e) {
+    notify('Erreur lors du nettoyage du cache.', 'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = '↺ Vider le cache et recharger'; }
+  }
+}
+
 // ── APP MODE ───────────────────────────────────────
 let appMode = 'travail'; // 'travail' | 'perso'
 
