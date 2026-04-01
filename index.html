@@ -7,537 +7,800 @@
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#1a73e8" />
+  <meta name="theme-color" content="#000080" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Mitmi" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
+    /* ══════════════════════════════════════════════════
+       WINDOWS 2000 / MICROSOFT 2000 DESIGN SYSTEM
+       ══════════════════════════════════════════════════ */
     :root {
-      --bg-deep:    #0c0507;
-      --glass-bg:   rgba(255, 195, 140, 0.055);
-      --glass-bg-h: rgba(255, 195, 140, 0.09);
-      --glass-bd:   rgba(255, 135, 65, 0.14);
-      --glass-bd-s: rgba(255, 135, 65, 0.28);
-      --accent:     #FF6B35;
-      --accent2:    #FF4757;
-      --amber:      #FFB347;
-      --glow:       rgba(255, 107, 53, 0.28);
-      --txt:        rgba(255, 255, 255, 0.94);
-      --txt2:       rgba(255, 210, 175, 0.72);
-      --txt3:       rgba(255, 185, 145, 0.42);
-      --sidebar:    400px;
-      --r:          12px;
-      --nb:         64px;
+      --win-bg:        #d4d0c8;
+      --win-bg2:       #ece9d8;
+      --win-face:      #d4d0c8;
+      --win-titlebar:  #0a246a;
+      --win-titlebar2: #a6b5d7;
+      --win-txt:       #000000;
+      --win-txt-inv:   #ffffff;
+      --win-txt-dim:   #6d6d6d;
+      --win-border-lt: #ffffff;
+      --win-border-dk: #808080;
+      --win-border-dkk:#404040;
+      --win-highlight: #0a246a;
+      --win-hl-txt:    #ffffff;
+      --win-btn:       #d4d0c8;
+      --win-btn-lt:    #ffffff;
+      --win-btn-sh:    #808080;
+      --win-btn-dksh:  #404040;
+      --win-input-bg:  #ffffff;
+      --win-input-bd:  #7f9db9;
+      --win-green:     #008000;
+      --win-red:       #cc0000;
+      --win-amber:     #b87800;
+      --sidebar:       340px;
+      --nb:            56px;
     }
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; overflow:hidden; }
 
     body {
       display:flex;
-      background: radial-gradient(ellipse 80% 100% at 15% 50%, #2b0e00 0%, #0c0507 55%, #100308 100%);
-      font-family: 'Inter', system-ui, sans-serif;
-      color: var(--txt);
-    }
-    body::after {
-      content:'';
-      position:fixed; inset:0; pointer-events:none;
-      background:
-        radial-gradient(circle at 8%  18%, rgba(255,107,53,.05) 0%, transparent 40%),
-        radial-gradient(circle at 92% 82%, rgba(255,71, 87,.04) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(255,179,71,.025) 0%, transparent 60%);
+      background: #3a6ea5;
+      font-family: Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      font-size: 11px;
+      color: var(--win-txt);
     }
 
-    /* ── SIDEBAR (desktop) ──────────────────────────── */
+    /* ── BEVELED HELPERS ─────────────────────────────── */
+    .raised {
+      border-top:    2px solid var(--win-border-lt);
+      border-left:   2px solid var(--win-border-lt);
+      border-right:  2px solid var(--win-border-dkk);
+      border-bottom: 2px solid var(--win-border-dkk);
+    }
+    .raised-sm {
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dk);
+      border-bottom: 1px solid var(--win-border-dk);
+    }
+    .sunken {
+      border-top:    2px solid var(--win-border-dkk);
+      border-left:   2px solid var(--win-border-dkk);
+      border-right:  2px solid var(--win-border-lt);
+      border-bottom: 2px solid var(--win-border-lt);
+    }
+    .sunken-sm {
+      border-top:    1px solid var(--win-border-dk);
+      border-left:   1px solid var(--win-border-dk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+    }
+
+    /* ── WINDOW CHROME ───────────────────────────────── */
+    .win-window {
+      background: var(--win-face);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .win-titlebar {
+      background: linear-gradient(to right, #0a246a 0%, #a6b5d7 100%);
+      color: var(--win-txt-inv);
+      padding: 3px 4px 3px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      user-select: none;
+      font-size: 11px;
+      font-weight: bold;
+      height: 22px;
+    }
+    .win-titlebar-left { display: flex; align-items: center; gap: 4px; }
+    .win-titlebar-icon {
+      width: 15px; height: 15px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .win-titlebar-btns { display: flex; gap: 2px; }
+    .win-ctrl-btn {
+      width: 16px; height: 14px;
+      background: var(--win-btn);
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-dkk);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 9px; font-weight: bold; color: var(--win-txt);
+      font-family: Marlett, Tahoma, sans-serif;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────────── */
     .sidebar {
       width: var(--sidebar);
       flex-shrink: 0;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      background: rgba(10, 4, 6, 0.78);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
-      border-right: 1px solid var(--glass-bd);
+      background: var(--win-face);
+      border-right: 2px solid var(--win-border-dkk);
+      border-top: 2px solid var(--win-border-lt);
       z-index: 10;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,107,53,.25) transparent;
+      overflow: hidden;
     }
-    .sidebar::-webkit-scrollbar { width:4px; }
-    .sidebar::-webkit-scrollbar-thumb { background:rgba(255,107,53,.25); border-radius:2px; }
 
+    /* Title bar */
     .hd {
-      padding: 26px 24px 18px;
-      border-bottom: 1px solid var(--glass-bd);
+      background: linear-gradient(to right, #0a246a 0%, #3a6ea5 100%);
+      padding: 4px 8px 5px;
       flex-shrink: 0;
+      border-bottom: 2px solid var(--win-border-dkk);
     }
-    .logo { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    .logo { display:flex; align-items:center; gap:6px; margin-bottom:2px; }
     .logo-ic {
-      width:38px; height:38px; border-radius:11px; flex-shrink:0;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 4px 18px var(--glow);
+      width: 20px; height: 20px; flex-shrink:0;
       display:flex; align-items:center; justify-content:center;
-      font-size:19px;
     }
     .logo-tx {
-      font-size:22px; font-weight:800; letter-spacing:-.6px;
-      background: linear-gradient(120deg, #fff 0%, var(--amber) 90%);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text;
+      font-size: 13px; font-weight: bold;
+      color: #ffffff;
+      text-shadow: 1px 1px 0 #000080;
+      letter-spacing: 0;
     }
-    .tagline { font-size:12px; color:var(--txt3); line-height:1.5; }
+    .tagline { font-size: 10px; color: #c8d4e8; }
 
-    .sb-body { flex:1; padding:18px; display:flex; flex-direction:column; gap:14px; }
+    /* ── SIDEBAR TOOLBAR ─────────────────────────────── */
+    .win-toolbar {
+      background: var(--win-bg);
+      padding: 2px 4px;
+      border-bottom: 1px solid var(--win-border-dk);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
 
+    /* ── SIDEBAR BODY ────────────────────────────────── */
+    .sb-body {
+      flex: 1;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--win-face);
+      scrollbar-width: thin;
+      scrollbar-color: #c0c0c0 #f0f0f0;
+    }
+    .sb-body::-webkit-scrollbar { width: 14px; }
+    .sb-body::-webkit-scrollbar-track { background: #f0f0f0; border: 1px solid #808080; }
+    .sb-body::-webkit-scrollbar-thumb { background: #c0c0c0; border: 1px solid #808080; }
+    .sb-body::-webkit-scrollbar-button { background: #d4d0c8; border: 1px solid #808080; height: 14px; }
+
+    /* ── SECTION HEADERS ─────────────────────────────── */
     .lbl {
-      font-size:10.5px; font-weight:600; text-transform:uppercase;
-      letter-spacing:1.1px; color:var(--txt3); margin-bottom:9px;
+      font-size: 11px; font-weight: bold;
+      color: var(--win-txt);
+      margin-bottom: 4px;
     }
 
+    /* ── WIN GROUP BOX ───────────────────────────────── */
     .card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-bd);
-      border-radius: var(--r);
-      padding: 14px;
-      transition: background .2s, border-color .2s;
+      background: var(--win-face);
+      border: 1px solid var(--win-border-dk);
+      padding: 8px 6px 6px;
+      position: relative;
     }
-    .card:hover { background:var(--glass-bg-h); border-color:rgba(255,135,65,.22); }
 
+    /* ── MODE TRANSPORT ──────────────────────────────── */
     .modes {
-      display:flex; gap:5px; padding:4px;
-      background:rgba(255,195,140,.035);
-      border:1px solid rgba(255,135,65,.1);
-      border-radius:10px;
+      display: flex;
+      gap: 0;
     }
     .mode-btn {
-      flex:1; padding:8px 4px; border:none; border-radius:8px;
-      font-size:12px; font-weight:500; font-family:inherit;
-      cursor:pointer; transition:all .2s;
-      background:transparent; color:var(--txt3);
-      display:flex; align-items:center; justify-content:center; gap:4px;
+      flex: 1; padding: 4px 6px;
+      background: var(--win-btn);
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-dkk);
+      font-size: 11px; font-weight: normal; font-family: Tahoma, sans-serif;
+      cursor: pointer; color: var(--win-txt);
+      display: flex; align-items: center; justify-content: center; gap: 3px;
+      user-select: none;
     }
-    .mode-btn.on { background:rgba(255,107,53,.14); color:var(--accent); }
+    .mode-btn:first-child { border-radius: 0; }
+    .mode-btn.on {
+      background: var(--win-face);
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+      font-weight: bold;
+    }
+    .mode-btn:active:not(.on) {
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+    }
 
-    .team-list { display:flex; flex-direction:column; gap:7px; min-height:36px; }
-    .empty { font-size:12px; color:var(--txt3); text-align:center; padding:12px 0; }
+    /* ── TEAM LIST ───────────────────────────────────── */
+    .team-list { display:flex; flex-direction:column; gap:2px; min-height:28px; }
+    .empty { font-size: 11px; color: var(--win-txt-dim); text-align: center; padding: 8px 0; font-style: italic; }
 
     .mbr {
-      display:flex; align-items:center; gap:9px; padding:9px 11px;
-      background:rgba(255,195,140,.04);
-      border:1px solid rgba(255,135,65,.09);
-      border-radius:10px;
-      transition:all .2s;
-      animation: si .28s ease;
+      display:flex; align-items:center; gap:5px; padding:3px 5px;
+      background: var(--win-input-bg);
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+      animation: si .15s ease;
     }
-    @keyframes si { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
-    .mbr.geocoded { border-color:rgba(100,220,100,.18); }
-    .mbr.error    { border-color:rgba(255,71,87,.28); }
+    @keyframes si { from{opacity:0} to{opacity:1} }
+    .mbr.geocoded { border-left: 3px solid var(--win-green); }
+    .mbr.error    { border-left: 3px solid var(--win-red); }
 
     .av {
-      width:30px; height:30px; border-radius:50%; flex-shrink:0;
+      width: 22px; height: 22px; flex-shrink:0;
       display:flex; align-items:center; justify-content:center;
-      font-size:12px; font-weight:700; color:#fff;
+      font-size: 10px; font-weight: bold; color: #fff;
+      border: 1px solid #808080;
     }
     .mbr-info { flex:1; min-width:0; }
-    .mbr-name { font-size:12.5px; font-weight:600; }
-    .mbr-addr { font-size:11px; color:var(--txt3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .mbr-name { font-size: 11px; font-weight: bold; }
+    .mbr-addr { font-size: 10px; color: var(--win-txt-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-    .st { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-    .st.pending  { background:rgba(255,200,80,.55); }
-    .st.loading  { background:var(--amber); animation:pu .9s infinite; }
-    .st.geocoded { background:rgba(100,220,100,.75); }
-    .st.error    { background:var(--accent2); }
-    @keyframes pu { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.75)} }
+    .st { width: 8px; height: 8px; flex-shrink:0; border: 1px solid #808080; }
+    .st.pending  { background: #ffff00; }
+    .st.loading  { background: #ff8000; animation: pu .9s infinite; }
+    .st.geocoded { background: #00cc00; }
+    .st.error    { background: #cc0000; }
+    @keyframes pu { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     .rm-btn {
-      background:none; border:none; cursor:pointer;
-      color:var(--txt3); font-size:15px; padding:2px; border-radius:4px;
-      transition:color .15s; flex-shrink:0;
-      display:flex; align-items:center; justify-content:center;
+      background: var(--win-btn); border: none; cursor: pointer;
+      color: var(--win-txt); font-size: 11px; padding: 1px 4px;
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-dkk);
+      flex-shrink: 0; font-family: Tahoma, sans-serif;
     }
-    .rm-btn:hover { color:var(--accent2); }
+    .rm-btn:active {
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+    }
 
     /* ── WEIGHT STEPPER ─────────────────────────────── */
-    .wgt-ctrl { display:flex; align-items:center; gap:2px; flex-shrink:0; }
+    .wgt-ctrl { display:flex; align-items:center; gap:1px; flex-shrink:0; }
     .wgt-btn {
-      width:20px; height:20px; border:1px solid var(--glass-bd); border-radius:5px;
-      background:var(--glass-bg); color:var(--txt3); font-size:14px; line-height:1;
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      transition:all .15s; padding:0; font-family:inherit; flex-shrink:0;
+      width: 16px; height: 16px;
+      background: var(--win-btn);
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-dkk);
+      cursor: pointer; font-size: 12px; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-family: Tahoma, sans-serif; color: var(--win-txt); padding: 0;
     }
-    .wgt-btn:hover { background:rgba(255,107,53,.12); border-color:rgba(255,107,53,.3); color:var(--accent); }
+    .wgt-btn:active {
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+    }
     .wgt-val {
-      font-size:11px; font-weight:700; color:var(--txt3);
-      min-width:16px; text-align:center; transition:color .15s;
+      font-size: 10px; font-weight: bold; color: var(--win-txt-dim);
+      min-width: 16px; text-align: center;
     }
-    .wgt-val.hi { color:var(--accent); }
+    .wgt-val.hi { color: #0000cc; }
 
-    .form { display:flex; flex-direction:column; gap:9px; }
-    .il { font-size:11px; font-weight:500; color:var(--txt2); margin-bottom:4px; display:block; }
+    /* ── FORM ────────────────────────────────────────── */
+    .form { display:flex; flex-direction:column; gap:5px; }
+    .il { font-size: 11px; font-weight: bold; color: var(--win-txt); margin-bottom: 2px; display: block; }
     .gi {
-      width:100%; background:rgba(255,195,140,.035);
-      border:1px solid rgba(255,135,65,.13); border-radius:8px;
-      padding:9px 12px; color:var(--txt); font-size:13px; font-family:inherit;
-      outline:none; transition:all .2s;
+      width: 100%;
+      background: var(--win-input-bg);
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+      padding: 3px 5px; color: var(--win-txt); font-size: 11px; font-family: Tahoma, sans-serif;
+      outline: none;
     }
-    .gi::placeholder { color:var(--txt3); }
+    .gi::placeholder { color: var(--win-txt-dim); }
     .gi:focus {
-      border-color:rgba(255,107,53,.48); background:rgba(255,195,140,.06);
-      box-shadow:0 0 0 3px rgba(255,107,53,.1);
+      outline: 1px dotted #000;
+      outline-offset: -2px;
+    }
+
+    /* ── WIN BUTTON ──────────────────────────────────── */
+    .win-btn {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 4px 12px;
+      background: var(--win-btn);
+      border-top:    2px solid var(--win-border-lt);
+      border-left:   2px solid var(--win-border-lt);
+      border-right:  2px solid var(--win-border-dkk);
+      border-bottom: 2px solid var(--win-border-dkk);
+      color: var(--win-txt); font-size: 11px; font-family: Tahoma, sans-serif;
+      cursor: pointer; user-select: none;
+    }
+    .win-btn:active:not(:disabled), .win-btn.pressed {
+      border-top:    2px solid var(--win-border-dkk);
+      border-left:   2px solid var(--win-border-dkk);
+      border-right:  2px solid var(--win-border-lt);
+      border-bottom: 2px solid var(--win-border-lt);
+      padding: 5px 11px 3px 13px;
+    }
+    .win-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .win-btn:focus {
+      outline: 1px dotted #000;
+      outline-offset: -4px;
+    }
+    .win-btn.primary {
+      font-weight: bold;
+      border: 2px solid #000;
+      box-shadow: inset -2px -2px 0 var(--win-border-dkk), inset 2px 2px 0 var(--win-border-lt);
+      border-radius: 0;
     }
 
     .btn-add {
-      display:flex; align-items:center; justify-content:center; gap:6px;
-      padding:9px 14px; background:rgba(255,107,53,.09);
-      border:1px solid rgba(255,107,53,.28); border-radius:8px;
-      color:var(--accent); font-size:12.5px; font-weight:500; font-family:inherit;
-      cursor:pointer; transition:all .2s;
+      display:flex; align-items:center; justify-content:center; gap:4px;
+      padding: 4px 10px;
+      background: var(--win-btn);
+      border-top:    2px solid var(--win-border-lt);
+      border-left:   2px solid var(--win-border-lt);
+      border-right:  2px solid var(--win-border-dkk);
+      border-bottom: 2px solid var(--win-border-dkk);
+      color: var(--win-txt); font-size: 11px; font-family: Tahoma, sans-serif;
+      cursor: pointer; user-select: none;
     }
-    .btn-add:hover { background:rgba(255,107,53,.16); border-color:rgba(255,107,53,.46); transform:translateY(-1px); }
-
-    .ac-wrap { position:relative; }
-    .ac-list {
-      position:fixed; z-index:9999;
-      background:rgb(22, 9, 14); backdrop-filter:blur(20px);
-      border:1px solid rgba(255,135,65,.45); border-radius:10px;
-      overflow:hidden; display:none;
-      box-shadow:0 12px 36px rgba(0,0,0,.75);
+    .btn-add:active {
+      border-top:    2px solid var(--win-border-dkk);
+      border-left:   2px solid var(--win-border-dkk);
+      border-right:  2px solid var(--win-border-lt);
+      border-bottom: 2px solid var(--win-border-lt);
     }
-    .ac-list.open { display:block; }
-    .ac-item {
-      padding:9px 12px; cursor:pointer;
-      border-bottom:1px solid rgba(255,135,65,.07);
-      transition:background .12s;
-      display:flex; flex-direction:column; gap:1px;
-    }
-    .ac-item:last-child { border-bottom:none; }
-    .ac-item:hover, .ac-item.hi { background:rgba(255,107,53,.12); }
-    .ac-main { font-size:12.5px; color:var(--txt); }
-    .ac-sub  { font-size:10.5px; color:var(--txt3); }
 
     .btn-primary {
-      width:100%; padding:13px;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      border:none; border-radius:var(--r);
-      color:#fff; font-size:13.5px; font-weight:600; font-family:inherit;
-      cursor:pointer; transition:all .2s;
-      box-shadow:0 4px 22px var(--glow);
-      display:flex; align-items:center; justify-content:center; gap:8px;
+      width: 100%; padding: 5px 12px;
+      background: var(--win-btn);
+      border-top:    2px solid var(--win-border-lt);
+      border-left:   2px solid var(--win-border-lt);
+      border-right:  2px solid var(--win-border-dkk);
+      border-bottom: 2px solid var(--win-border-dkk);
+      color: var(--win-txt); font-size: 11px; font-weight: bold; font-family: Tahoma, sans-serif;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      outline: 2px solid #000; outline-offset: -4px;
     }
-    .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 28px rgba(255,107,53,.42); }
-    .btn-primary:disabled { opacity:.42; cursor:not-allowed; }
+    .btn-primary:hover:not(:disabled) { background: #e8e4dc; }
+    .btn-primary:active:not(:disabled) {
+      border-top:    2px solid var(--win-border-dkk);
+      border-left:   2px solid var(--win-border-dkk);
+      border-right:  2px solid var(--win-border-lt);
+      border-bottom: 2px solid var(--win-border-lt);
+    }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
 
-    .ld-card { text-align:center; padding:22px 14px; }
+    /* ── AUTOCOMPLETE ────────────────────────────────── */
+    .ac-wrap { position:relative; }
+    .ac-list {
+      position: fixed; z-index: 9999;
+      background: var(--win-input-bg);
+      border: 1px solid var(--win-border-dkk);
+      overflow: hidden; display: none;
+      box-shadow: 2px 2px 4px rgba(0,0,0,.4);
+    }
+    .ac-list.open { display: block; }
+    .ac-item {
+      padding: 3px 8px; cursor: pointer;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover, .ac-item.hi {
+      background: var(--win-highlight);
+      color: var(--win-hl-txt);
+    }
+    .ac-item:hover .ac-sub, .ac-item.hi .ac-sub { color: #c8d4e8; }
+    .ac-main { font-size: 11px; }
+    .ac-sub  { font-size: 10px; color: var(--win-txt-dim); }
+
+    /* ── LOADING ─────────────────────────────────────── */
+    .ld-card { text-align:center; padding: 12px 8px; }
     .spinner {
-      width:30px; height:30px; border:3px solid rgba(255,107,53,.15);
-      border-top-color:var(--accent); border-radius:50%;
-      animation:sp .75s linear infinite; margin:0 auto 10px;
+      width: 20px; height: 20px;
+      border: 3px solid #c0c0c0;
+      border-top-color: #0a246a;
+      border-radius: 0;
+      animation: sp .75s linear infinite;
+      margin: 0 auto 8px;
     }
     @keyframes sp { to{transform:rotate(360deg)} }
-    .ld-main { font-size:12.5px; color:var(--txt2); }
-    .ld-sub  { font-size:11px; color:var(--txt3); margin-top:3px; }
+    .ld-main { font-size: 11px; color: var(--win-txt); font-weight: bold; }
+    .ld-sub  { font-size: 10px; color: var(--win-txt-dim); margin-top: 2px; }
 
+    /* ── RESULTS ─────────────────────────────────────── */
     .res-card {
-      padding:15px; cursor:pointer; position:relative; overflow:hidden;
-      transition:all .2s;
+      padding: 6px 6px 5px; cursor: pointer;
+      background: var(--win-input-bg);
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+      transition: none;
     }
-    .res-card::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:2px;
-      background:linear-gradient(90deg, var(--accent), var(--accent2));
-      opacity:0; transition:opacity .2s;
+    .res-card.on {
+      background: #eef3ff;
+      border: 1px solid #0a246a;
     }
-    .res-card:hover::before, .res-card.on::before { opacity:1; }
-    .res-card.on { background:rgba(255,107,53,.075); border-color:rgba(255,107,53,.25); }
-
-    .rc-head { display:flex; align-items:center; gap:8px; margin-bottom:9px; }
-    .rc-badge {
-      width:22px; height:22px; border-radius:50%; flex-shrink:0;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      display:flex; align-items:center; justify-content:center;
-      font-size:10.5px; font-weight:700;
-    }
-    .rc-lbl { font-size:11.5px; font-weight:600; color:var(--txt2); }
-    .rc-loc  { font-size:13.5px; font-weight:600; margin-bottom:3px; }
-    .rc-meta { font-size:11px; color:var(--txt3); margin-bottom:10px; }
-
-    .tt-row { display:flex; align-items:center; justify-content:space-between; font-size:11.5px; margin-bottom:4px; }
-    .tt-name { color:var(--txt2); display:flex; align-items:center; gap:6px; }
-    .tt-dot  { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-    .tt-vals { display:flex; gap:6px; }
-    .bdg {
-      display:flex; align-items:center; gap:3px; padding:2px 7px;
-      border-radius:20px; font-size:10.5px; font-weight:500;
-    }
-    .bdg.bk { background:rgba(100,180,255,.1); color:rgba(130,195,255,.9); }
-    .bdg.mt { background:rgba(160,120,255,.1); color:rgba(190,160,255,.9); }
-
-    .venues-sep { margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,135,65,.09); }
-    .venues-lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.7px; color:var(--txt3); margin-bottom:6px; }
-    .chips { display:flex; flex-wrap:wrap; gap:4px; }
-    .chip {
-      padding:2px 7px; background:rgba(255,195,140,.045);
-      border:1px solid rgba(255,135,65,.1);
-      border-radius:20px; font-size:10.5px; color:var(--txt2);
-    }
-
     .res-card.winner {
-      border-color: rgba(255,179,71,.38);
-      background: rgba(255,179,71,.055);
-      box-shadow: 0 0 0 1px rgba(255,179,71,.14), 0 8px 28px rgba(255,107,53,.13);
+      background: #fffaeb;
+      border: 1px solid #b87800;
     }
-    .res-card.winner::before { background: linear-gradient(90deg, var(--amber), var(--accent)); opacity:1; }
+
+    .rc-head { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+    .rc-badge {
+      width: 18px; height: 18px; flex-shrink:0;
+      background: var(--win-face);
+      border: 1px solid #808080;
+      display:flex; align-items:center; justify-content:center;
+      font-size: 9px; font-weight: bold;
+    }
+    .rc-lbl { font-size: 10px; color: var(--win-txt-dim); }
+    .rc-loc  { font-size: 12px; font-weight: bold; margin-bottom: 2px; }
+    .rc-meta { font-size: 10px; color: var(--win-txt-dim); margin-bottom: 6px; }
 
     .winner-tag {
-      display:inline-flex; align-items:center; gap:5px;
-      padding:3px 9px;
-      background:rgba(255,179,71,.14); border:1px solid rgba(255,179,71,.3);
-      border-radius:20px; font-size:10px; font-weight:700;
-      color:var(--amber); text-transform:uppercase; letter-spacing:.6px;
-      margin-bottom:10px;
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 1px 6px;
+      background: #fffaeb;
+      border: 1px solid #b87800;
+      font-size: 10px; font-weight: bold;
+      color: var(--win-amber);
+      margin-bottom: 5px;
     }
 
-    .score-pills { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:11px; }
+    .score-pills { display:flex; gap:3px; flex-wrap:wrap; margin-bottom:6px; }
     .score-pill {
-      padding:3px 8px;
-      background:rgba(255,195,140,.055); border:1px solid rgba(255,135,65,.12);
-      border-radius:20px; font-size:11px; color:var(--txt2);
-      display:flex; align-items:center; gap:3px;
+      padding: 1px 5px;
+      background: var(--win-face);
+      border: 1px solid #808080;
+      font-size: 10px; color: var(--win-txt);
+      display: flex; align-items: center; gap: 2px;
     }
 
-    .tt-bar-row { margin-bottom:7px; }
-    .tt-bar-hd  { display:flex; align-items:center; justify-content:space-between; margin-bottom:3px; }
-    .tt-bar-nm  { font-size:11.5px; color:var(--txt2); display:flex; align-items:center; gap:6px; }
-    .tt-bar-vs  { display:flex; gap:5px; }
-    .tt-bar-bg  { height:3px; background:rgba(255,195,140,.08); border-radius:2px; overflow:hidden; }
-    .tt-bar-fg  { height:100%; border-radius:2px; transition:width .5s ease; }
+    .tt-row { display:flex; align-items:center; justify-content:space-between; font-size:10px; margin-bottom:3px; }
+    .tt-name { color: var(--win-txt); display:flex; align-items:center; gap:4px; }
+    .tt-dot  { width: 8px; height: 8px; flex-shrink:0; border: 1px solid #808080; }
+    .tt-vals { display:flex; gap:4px; }
+    .bdg {
+      display:flex; align-items:center; gap:2px; padding: 1px 5px;
+      font-size: 10px;
+      border: 1px solid #808080;
+      background: var(--win-face);
+    }
+    .bdg.bk { border-color: #0000aa; background: #eeeeff; }
+    .bdg.mt { border-color: #6600aa; background: #f5eeff; }
+
+    .venues-sep { margin-top: 6px; padding-top: 6px; border-top: 1px solid #c0c0c0; }
+    .venues-lbl { font-size: 10px; font-weight: bold; color: var(--win-txt-dim); margin-bottom: 4px; text-transform: uppercase; }
+    .chips { display:flex; flex-wrap:wrap; gap:3px; }
+    .chip {
+      padding: 1px 5px;
+      background: var(--win-face);
+      border: 1px solid #808080;
+      font-size: 10px; color: var(--win-txt);
+    }
+
+    .tt-bar-row { margin-bottom: 5px; }
+    .tt-bar-hd  { display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; }
+    .tt-bar-nm  { font-size: 10px; color: var(--win-txt); display:flex; align-items:center; gap:4px; }
+    .tt-bar-vs  { display:flex; gap:3px; }
+    .tt-bar-bg  { height: 4px; background: #e0e0e0; border: 1px inset #808080; }
+    .tt-bar-fg  { height: 100%; transition: width .4s; }
 
     .why-block {
-      margin-top:11px; padding:10px 12px;
-      background:rgba(255,179,71,.05); border:1px solid rgba(255,179,71,.13);
-      border-radius:9px; font-size:11.5px; color:var(--txt2); line-height:1.6;
+      margin-top: 6px; padding: 5px 7px;
+      background: #fffff8;
+      border: 1px solid #b8a800;
+      font-size: 10px; color: var(--win-txt); line-height: 1.5;
     }
-    .why-block strong { color:var(--amber); font-weight:600; }
+    .why-block strong { color: #7a5c00; font-weight: bold; }
 
     /* ── MAP ──────────────────────────────────────────── */
     #map-wrap { flex:1; position:relative; }
     #map      { width:100%; height:100%; }
 
     .map-legend {
-      position:absolute; bottom:18px; right:18px; z-index:1000;
-      background:rgba(10,4,6,.85); backdrop-filter:blur(16px);
-      border:1px solid var(--glass-bd); border-radius:var(--r);
-      padding:11px 13px; display:none;
+      position: absolute; bottom: 14px; right: 14px; z-index: 1000;
+      background: var(--win-face);
+      border-top:    2px solid var(--win-border-lt);
+      border-left:   2px solid var(--win-border-lt);
+      border-right:  2px solid var(--win-border-dkk);
+      border-bottom: 2px solid var(--win-border-dkk);
+      padding: 6px 8px; display: none;
     }
-    .ml-title { font-size:9.5px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; color:var(--txt3); margin-bottom:7px; }
-    .ml-row   { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--txt2); margin-bottom:4px; }
-    .ml-dot   { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .ml-title { font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--win-txt-dim); margin-bottom: 4px; }
+    .ml-row   { display:flex; align-items:center; gap:5px; font-size: 11px; color: var(--win-txt); margin-bottom: 3px; }
+    .ml-dot   { width: 8px; height: 8px; border: 1px solid #808080; flex-shrink:0; }
 
-    /* ── POPUP ACTIONS ───────────────────────────────────── */
+    /* ── POPUP ACTIONS ───────────────────────────────── */
     .pp-actions {
-      display:flex; gap:6px; margin-top:10px; padding-top:9px;
-      border-top:1px solid rgba(255,135,65,.1);
+      display: flex; gap: 4px; margin-top: 7px; padding-top: 6px;
+      border-top: 1px solid #c0c0c0;
     }
     .pp-action-btn {
-      flex:1; display:flex; align-items:center; justify-content:center; gap:5px;
-      padding:7px 8px; border:1px solid var(--glass-bd); border-radius:9px;
-      font-size:11.5px; font-weight:500; font-family:'Inter',sans-serif;
-      cursor:pointer; transition:all .18s; text-decoration:none;
-      color:var(--txt2); background:var(--glass-bg);
+      flex: 1; display:flex; align-items:center; justify-content:center; gap:3px;
+      padding: 3px 6px;
+      background: var(--win-btn);
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-dkk);
+      font-size: 11px; font-family: Tahoma, sans-serif;
+      cursor: pointer; text-decoration: none;
+      color: var(--win-txt);
     }
-    .pp-action-btn:hover { background:rgba(255,107,53,.1); border-color:rgba(255,107,53,.3); color:var(--accent); }
-    .pp-action-btn.pp-share { background:rgba(255,107,53,.07); border-color:rgba(255,107,53,.2); color:var(--accent); }
-    .pp-action-btn.pp-share:hover { background:rgba(255,107,53,.18); }
+    .pp-action-btn:hover { background: #e8e4dc; }
+    .pp-action-btn:active {
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+    }
 
-    /* ── ADDRESS FIELD WITH LOC BUTTON ──────────────────── */
+    /* ── LOCATION BUTTON ─────────────────────────────── */
     .addr-field-wrap { position:relative; }
-    .addr-field-wrap .gi { padding-right:38px; }
+    .addr-field-wrap .gi { padding-right: 28px; }
     .loc-btn {
-      position:absolute; right:6px; top:50%; transform:translateY(-50%);
-      width:28px; height:28px; border:none; border-radius:7px;
-      background:rgba(255,107,53,.12); color:var(--accent);
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      transition:background .15s;
+      position: absolute; right: 2px; top: 50%; transform: translateY(-50%);
+      width: 22px; height: 20px;
+      background: var(--win-btn);
+      border-top:    1px solid var(--win-border-lt);
+      border-left:   1px solid var(--win-border-lt);
+      border-right:  1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-dkk);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
     }
-    .loc-btn:hover { background:rgba(255,107,53,.25); }
-    .loc-btn.loading { animation:pu .9s infinite; pointer-events:none; }
+    .loc-btn:active {
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+    }
+    .loc-btn.loading { animation: pu .9s infinite; pointer-events: none; }
 
-    /* ── NOTIFICATION ─────────────────────────────────── */
-    .notif {
-      position:fixed; top:18px; right:18px; z-index:9999;
-      padding:11px 15px; background:rgba(12,5,7,.92);
-      backdrop-filter:blur(18px);
-      border:1px solid var(--glass-bd); border-radius:var(--r);
-      font-size:12.5px; max-width:280px;
-      animation: siri .28s ease;
+    /* ── STATUS BAR ──────────────────────────────────── */
+    .statusbar {
+      height: 20px;
+      background: var(--win-face);
+      border-top: 1px solid var(--win-border-dkk);
+      display: flex; align-items: center;
+      padding: 0 6px; gap: 8px;
+      flex-shrink: 0;
+      font-size: 10px; color: var(--win-txt-dim);
     }
-    .notif.error   { border-color:rgba(255,71,87,.4); }
-    .notif.success { border-color:rgba(100,220,100,.3); }
-    @keyframes siri { from{opacity:0;transform:translateX(15px)} to{opacity:1;transform:none} }
+    .statusbar-pane {
+      border-top:    1px solid var(--win-border-dkk);
+      border-left:   1px solid var(--win-border-dkk);
+      border-right:  1px solid var(--win-border-lt);
+      border-bottom: 1px solid var(--win-border-lt);
+      padding: 1px 6px; font-size: 10px; color: var(--win-txt-dim);
+    }
+
+    /* ── NOTIFICATION ────────────────────────────────── */
+    .notif {
+      position: fixed; top: 14px; right: 14px; z-index: 9999;
+      padding: 8px 12px;
+      background: var(--win-face);
+      border-top:    2px solid var(--win-border-lt);
+      border-left:   2px solid var(--win-border-lt);
+      border-right:  2px solid var(--win-border-dkk);
+      border-bottom: 2px solid var(--win-border-dkk);
+      font-size: 11px; max-width: 260px;
+      box-shadow: 3px 3px 6px rgba(0,0,0,.4);
+      animation: popIn .15s ease;
+    }
+    .notif.error   { border-left: 3px solid var(--win-red); }
+    .notif.success { border-left: 3px solid var(--win-green); }
+    @keyframes popIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:none} }
 
     /* ── LEAFLET OVERRIDES ───────────────────────────── */
     .leaflet-popup-content-wrapper {
-      background:rgba(14,6,9,.92) !important;
-      backdrop-filter:blur(18px) !important;
-      border:1px solid var(--glass-bd) !important;
-      border-radius:var(--r) !important;
-      box-shadow:0 8px 30px rgba(0,0,0,.5) !important;
-      color:var(--txt) !important;
+      background: var(--win-face) !important;
+      border: none !important;
+      border-top:    2px solid var(--win-border-lt) !important;
+      border-left:   2px solid var(--win-border-lt) !important;
+      border-right:  2px solid var(--win-border-dkk) !important;
+      border-bottom: 2px solid var(--win-border-dkk) !important;
+      border-radius: 0 !important;
+      box-shadow: 3px 3px 6px rgba(0,0,0,.4) !important;
+      color: var(--win-txt) !important;
     }
-    .leaflet-popup-tip { background:rgba(14,6,9,.92) !important; }
-    .leaflet-popup-content { margin:11px 13px !important; font-family:'Inter',sans-serif !important; font-size:12.5px !important; }
-    .pp-name { font-weight:600; margin-bottom:3px; }
-    .pp-sub  { font-size:11px; color:var(--txt3); }
-    .leaflet-control-zoom a { background:rgba(14,6,9,.85) !important; color:var(--txt) !important; border-color:var(--glass-bd) !important; }
-    .leaflet-control-zoom a:hover { background:rgba(255,107,53,.15) !important; }
+    .leaflet-popup-tip { background: var(--win-face) !important; }
+    .leaflet-popup-content {
+      margin: 8px 10px !important;
+      font-family: Tahoma, sans-serif !important;
+      font-size: 11px !important;
+    }
+    .pp-name { font-weight: bold; margin-bottom: 2px; font-size: 12px; }
+    .pp-sub  { font-size: 10px; color: var(--win-txt-dim); }
+    .leaflet-control-zoom a {
+      background: var(--win-btn) !important;
+      color: var(--win-txt) !important;
+      border: 1px solid var(--win-border-dk) !important;
+      border-radius: 0 !important;
+      font-family: Tahoma, sans-serif !important;
+      font-weight: bold !important;
+    }
+    .leaflet-control-zoom a:hover { background: #e8e4dc !important; }
+    .leaflet-popup-close-button { color: var(--win-txt) !important; font-size: 14px !important; }
+
+    /* ── SEPARATOR ───────────────────────────────────── */
+    .win-sep {
+      height: 2px;
+      border-top: 1px solid var(--win-border-dkk);
+      border-bottom: 1px solid var(--win-border-lt);
+      margin: 2px 0;
+    }
 
     /* ── MOBILE ───────────────────────────────────────── */
     @media(max-width:768px){
       body { flex-direction:column; }
-
-      /* Map always fullscreen background */
       #map-wrap { position:fixed; inset:0; z-index:0; height:100dvh !important; }
-
-      /* Sidebar hidden — replaced by bottom nav + panels */
       .sidebar { display:none !important; }
+      .map-legend { bottom:calc(var(--nb) + 8px); right:8px; position:fixed; }
+      .nb-ic svg { width:20px; height:20px; display:block; }
 
-      /* Legend above navbar */
-      .map-legend { bottom:calc(var(--nb) + 10px); right:12px; position:fixed; }
-
-      /* SVG icons in navbar */
-      .nb-ic svg { width:22px; height:22px; display:block; }
-
-      /* ── Bottom Navbar ─────────────────────────────── */
       .bottom-nav {
-        display:flex;
+        display: flex;
         position:fixed; bottom:0; left:0; right:0; z-index:300;
-        height:var(--nb);
-        background:rgba(10,4,6,.97);
-        backdrop-filter:blur(24px);
-        -webkit-backdrop-filter:blur(24px);
-        border-top:1px solid var(--glass-bd);
-        padding-bottom:env(safe-area-inset-bottom, 0px);
+        height: var(--nb);
+        background: var(--win-face);
+        border-top: 2px solid var(--win-border-lt);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
       }
       .nb-btn {
         flex:1; display:flex; flex-direction:column; align-items:center;
-        justify-content:center; gap:3px;
-        border:none; background:transparent; color:var(--txt3);
-        cursor:pointer; font-family:inherit; transition:color .2s;
-        padding:8px 0;
+        justify-content:center; gap:2px;
+        border: none; border-right: 1px solid var(--win-border-dk);
+        background: var(--win-face); color: var(--win-txt-dim);
+        cursor:pointer; font-family: Tahoma, sans-serif; transition: none;
+        padding:6px 0;
       }
-      .nb-btn.nb-active { color:var(--accent); }
-      .nb-ic  { font-size:22px; line-height:1; }
-      .nb-lbl { font-size:10px; font-weight:500; letter-spacing:.2px; }
+      .nb-btn:last-child { border-right: none; }
+      .nb-btn.nb-active {
+        background: var(--win-bg2);
+        color: #0a246a;
+        border-top: 2px solid var(--win-border-dkk);
+        border-bottom: 1px solid var(--win-border-lt);
+      }
+      .nb-ic  { font-size: 20px; line-height: 1; }
+      .nb-lbl { font-size: 10px; font-weight: bold; }
 
-      /* ── "+" FAB ────────────────────────────────────── */
       .mob-fab {
-        display:flex;
-        position:fixed; bottom:calc(var(--nb) + 14px); right:16px; z-index:200;
-        width:52px; height:52px; border-radius:50%;
-        background:linear-gradient(135deg,var(--accent),var(--accent2));
-        box-shadow:0 4px 20px var(--glow);
-        align-items:center; justify-content:center;
-        font-size:26px; font-weight:300; line-height:1;
-        border:none; cursor:pointer; color:#fff;
-        transition:transform .2s, box-shadow .2s;
+        display: flex;
+        position: fixed; bottom: calc(var(--nb) + 12px); right: 12px; z-index: 200;
+        width: 44px; height: 44px;
+        background: var(--win-btn);
+        border-top:    3px solid var(--win-border-lt);
+        border-left:   3px solid var(--win-border-lt);
+        border-right:  3px solid var(--win-border-dkk);
+        border-bottom: 3px solid var(--win-border-dkk);
+        align-items: center; justify-content: center;
+        font-size: 22px; font-weight: bold; line-height: 1;
+        cursor: pointer; color: var(--win-txt);
       }
-      .mob-fab:active { transform:scale(.92); }
+      .mob-fab:active {
+        border-top:    3px solid var(--win-border-dkk);
+        border-left:   3px solid var(--win-border-dkk);
+        border-right:  3px solid var(--win-border-lt);
+        border-bottom: 3px solid var(--win-border-lt);
+      }
 
-      /* ── Bottom Sheets ──────────────────────────────── */
       .mob-sheet {
-        position:fixed; bottom:var(--nb); left:0; right:0; z-index:250;
-        max-height:calc(88dvh - var(--nb));
-        background:rgba(10,4,6,.98);
-        backdrop-filter:blur(28px);
-        -webkit-backdrop-filter:blur(28px);
-        border-top:1px solid var(--glass-bd-s);
-        border-radius:20px 20px 0 0;
-        transform:translateY(100%);
-        transition:transform .35s cubic-bezier(.32,.72,0,1);
-        display:flex; flex-direction:column;
-        will-change:transform; touch-action:none;
+        position: fixed; bottom: var(--nb); left: 0; right: 0; z-index: 250;
+        max-height: calc(88dvh - var(--nb));
+        background: var(--win-face);
+        border-top: 2px solid var(--win-border-lt);
+        border-left: 2px solid var(--win-border-lt);
+        transform: translateY(100%);
+        transition: transform .25s ease;
+        display: flex; flex-direction: column;
+        will-change: transform; touch-action: none;
       }
-      .mob-sheet.mob-open { transform:translateY(0); }
-      .mob-sheet-short { max-height:calc(55dvh - var(--nb)); }
+      .mob-sheet.mob-open { transform: translateY(0); }
+      .mob-sheet-short { max-height: calc(55dvh - var(--nb)); }
 
       .mob-sh-handle {
-        display:flex; justify-content:center; padding:12px 0 6px;
-        cursor:grab; flex-shrink:0;
+        display: flex; justify-content: center; padding: 8px 0 4px;
+        cursor: grab; flex-shrink: 0;
+        background: var(--win-bg);
+        border-bottom: 1px solid var(--win-border-dk);
       }
       .mob-sh-bar {
-        width:36px; height:4px; border-radius:2px;
-        background:rgba(255,135,65,.35);
+        width: 32px; height: 4px;
+        background: #808080;
+        border-top: 1px solid var(--win-border-dkk);
       }
       .mob-sh-hdr {
-        display:flex; align-items:center; justify-content:space-between;
-        padding:0 16px 12px; border-bottom:1px solid var(--glass-bd);
-        margin-bottom:0; flex-shrink:0;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 10px 8px;
+        border-bottom: 1px solid var(--win-border-dk);
+        flex-shrink: 0;
+        background: linear-gradient(to right, #0a246a 0%, #3a6ea5 100%);
+        padding-top: 4px;
       }
-      .mob-sh-title { font-size:15px; font-weight:700; color:var(--txt); }
+      .mob-sh-title { font-size: 13px; font-weight: bold; color: #fff; }
       .mob-sh-close {
-        background:rgba(255,255,255,.07); border:none; color:var(--txt2);
-        font-size:14px; cursor:pointer; width:28px; height:28px;
-        border-radius:50%; display:flex; align-items:center; justify-content:center;
-        transition:background .15s; font-family:inherit;
+        background: var(--win-btn); color: var(--win-txt);
+        border-top:    1px solid var(--win-border-lt);
+        border-left:   1px solid var(--win-border-lt);
+        border-right:  1px solid var(--win-border-dkk);
+        border-bottom: 1px solid var(--win-border-dkk);
+        font-size: 11px; cursor: pointer; width: 22px; height: 18px;
+        display: flex; align-items: center; justify-content: center;
+        font-family: Tahoma, sans-serif;
       }
-      .mob-sh-close:hover { background:rgba(255,107,53,.18); color:#fff; }
       .mob-sh-inner {
-        flex:1; overflow-y:auto; padding:14px 16px 10px;
-        scrollbar-width:thin;
-        scrollbar-color:rgba(255,107,53,.2) transparent;
+        flex: 1; overflow-y: auto; padding: 10px 12px 8px;
+        scrollbar-width: thin;
       }
       .mob-sh-footer {
-        flex-shrink:0; padding:12px 16px;
-        border-top:1px solid var(--glass-bd);
+        flex-shrink: 0; padding: 8px 12px;
+        border-top: 1px solid var(--win-border-dk);
+        background: var(--win-bg);
       }
 
-      /* ── Tab Panels ─────────────────────────────────── */
       .mob-panel {
-        display:none;
-        position:fixed; inset:0; bottom:var(--nb); z-index:150;
-        background: radial-gradient(ellipse 80% 100% at 15% 50%, #2b0e00 0%, #0c0507 55%, #100308 100%);
-        flex-direction:column; overflow:hidden;
+        display: none;
+        position: fixed; inset: 0; bottom: var(--nb); z-index: 150;
+        background: var(--win-face);
+        flex-direction: column; overflow: hidden;
       }
-      .mob-panel.mob-panel-show { display:flex; }
+      .mob-panel.mob-panel-show { display: flex; }
 
       .mob-panel-hdr {
-        padding:20px 20px 14px; border-bottom:1px solid var(--glass-bd);
-        flex-shrink:0;
-        background:rgba(10,4,6,.6);
-        backdrop-filter:blur(16px);
+        padding: 4px 12px 5px;
+        border-bottom: 1px solid var(--win-border-dk);
+        flex-shrink: 0;
+        background: linear-gradient(to right, #0a246a 0%, #3a6ea5 100%);
       }
       .mob-panel-title {
-        font-size:20px; font-weight:800; letter-spacing:-.5px;
-        background:linear-gradient(120deg,#fff,var(--amber));
-        -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-        background-clip:text;
+        font-size: 14px; font-weight: bold;
+        color: #fff;
       }
       .mob-panel-body {
-        flex:1; overflow-y:auto; padding:16px;
-        scrollbar-width:thin;
-        scrollbar-color:rgba(255,107,53,.2) transparent;
+        flex: 1; overflow-y: auto; padding: 12px;
+        scrollbar-width: thin;
       }
 
-      /* ── Loading Overlay ────────────────────────────── */
       .mob-overlay {
-        position:fixed; inset:0; bottom:var(--nb); z-index:400;
-        background:rgba(12,5,7,.72);
-        backdrop-filter:blur(6px);
-        display:none; align-items:center; justify-content:center;
+        position: fixed; inset: 0; bottom: var(--nb); z-index: 400;
+        background: rgba(0,0,0,.5);
+        display: none; align-items: center; justify-content: center;
       }
-      .mob-overlay.mob-overlay-show { display:flex; }
+      .mob-overlay.mob-overlay-show { display: flex; }
     }
 
-    /* ── DESKTOP: hide mobile elements ───────────────── */
     @media(min-width:769px){
       .bottom-nav  { display:none !important; }
       .mob-fab     { display:none !important; }
@@ -551,55 +814,69 @@
 
 <!-- ── SIDEBAR (desktop only) ────────────────────── -->
 <aside class="sidebar" id="sheet">
+  <!-- Title bar -->
   <div class="hd">
     <div class="logo">
       <div class="logo-ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linejoin="round" style="width:20px;height:20px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5" stroke-linejoin="round" style="width:16px;height:16px">
           <path d="M12 2L21.5 7.5V16.5L12 22L2.5 16.5V7.5Z"/>
         </svg>
       </div>
       <span class="logo-tx">Mitmi Paris</span>
     </div>
-    <p class="tagline">Trouvez le point de rencontre idéal pour votre équipe à Paris</p>
+    <p class="tagline">Trouvez le point de rencontre ideal a Paris</p>
+  </div>
+
+  <!-- Toolbar strip -->
+  <div class="win-toolbar">
+    <span style="font-size:11px;font-weight:bold;color:#000080">Fichier</span>
+    <span style="font-size:11px;margin:0 2px">|</span>
+    <span style="font-size:11px;font-weight:bold;color:#000080">Affichage</span>
+    <span style="font-size:11px;margin:0 2px">|</span>
+    <span style="font-size:11px;font-weight:bold;color:#000080">Aide</span>
   </div>
 
   <div class="sb-body">
 
     <!-- Mode transport -->
     <div>
-      <div class="lbl">Mode de transport</div>
+      <div class="lbl">Mode de transport :</div>
       <div class="modes">
-        <button class="mode-btn on" id="mode-bike"  onclick="setMode('bike')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M15 6h-2l-3.5 6-2 5.5"/><path d="M12 6l2 5.5"/><path d="M5.5 17.5l4.5-5.5L12 6"/></svg> Vélo</button>
-        <button class="mode-btn"   id="mode-metro" onclick="setMode('metro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><rect x="5" y="2" width="14" height="16" rx="2"/><path d="M5 10h14"/><path d="M12 2v8"/><circle cx="8.5" cy="14.5" r="1"/><circle cx="15.5" cy="14.5" r="1"/><path d="M8 20l-2 2"/><path d="M16 20l2 2"/></svg> Métro</button>
-        <button class="mode-btn"   id="mode-both"  onclick="setMode('both')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M16 3l4 4-4 4"/><path d="M4 7h16"/><path d="M8 21l-4-4 4-4"/><path d="M20 17H4"/></svg> Combiné</button>
+        <button class="mode-btn on" id="mode-bike"  onclick="setMode('bike')">&#x1F6B2; Velo</button>
+        <button class="mode-btn"   id="mode-metro" onclick="setMode('metro')">&#x1F687; Metro</button>
+        <button class="mode-btn"   id="mode-both"  onclick="setMode('both')">&#x21C6; Combine</button>
       </div>
     </div>
 
+    <div class="win-sep"></div>
+
     <!-- Team -->
     <div>
-      <div class="lbl">Équipe &mdash; <span id="cnt">0</span> personne(s)</div>
+      <div class="lbl">Equipe &mdash; <span id="cnt">0</span> personne(s)</div>
       <div id="team-list" class="team-list">
         <div class="empty">Ajoutez des collaborateurs pour commencer</div>
       </div>
     </div>
 
+    <div class="win-sep"></div>
+
     <!-- Add form -->
     <div class="card">
-      <div class="lbl" style="margin-bottom:12px">Ajouter un collaborateur</div>
+      <div class="lbl" style="margin-bottom:6px">Ajouter un collaborateur</div>
       <div class="form">
         <div>
-          <label class="il">Prénom / Identifiant</label>
+          <label class="il">Prenom / Identifiant</label>
           <input class="gi" id="i-name" placeholder="ex : Marie" autocomplete="off" />
         </div>
         <div>
-          <label class="il">Adresse de départ</label>
+          <label class="il">Adresse de depart</label>
           <div class="addr-field-wrap">
-            <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+            <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli..." autocomplete="off"
               oninput="onAddrInput(this)"
               onkeydown="onAddrKey(event,'desktop')"
               onblur="setTimeout(closeAC, 180)" />
             <button class="loc-btn" id="loc-btn-desktop" title="Ma position" onclick="useMyLocation('desktop')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/></svg>
+              &#x25CE;
             </button>
           </div>
         </div>
@@ -609,39 +886,42 @@
 
     <!-- Find -->
     <button class="btn-primary" id="btn-find" onclick="runFind()" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
-      Trouver le point optimal
+      &#x25CE; Trouver le point optimal
     </button>
 
     <!-- Loading -->
     <div id="loading" style="display:none">
       <div class="card ld-card">
         <div class="spinner"></div>
-        <div class="ld-main" id="ld-main">Géolocalisation…</div>
+        <div class="ld-main" id="ld-main">Geolocalisation...</div>
         <div class="ld-sub"  id="ld-sub"></div>
       </div>
     </div>
 
     <!-- Results -->
     <div id="results" style="display:none">
-      <div class="lbl">Points de rencontre optimaux</div>
-      <div id="res-list" style="display:flex;flex-direction:column;gap:9px"></div>
+      <div class="lbl">Points de rencontre optimaux :</div>
+      <div id="res-list" style="display:flex;flex-direction:column;gap:4px"></div>
     </div>
 
+  </div>
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="statusbar-pane" id="sb-status">Pret</span>
+    <span class="statusbar-pane">Paris, France</span>
+    <span class="statusbar-pane">OSRM</span>
   </div>
 </aside>
 
 <!-- ── MAP ───────────────────────────────────────── -->
-<!-- Autocomplete dropdown — in body to escape stacking context -->
 <div class="ac-list" id="ac-list"></div>
 
 <div id="map-wrap">
   <div id="map"></div>
 
-  <!-- Mode switch -->
-
   <div class="map-legend" id="legend">
-    <div class="ml-title">Équipe</div>
+    <div class="ml-title">Equipe</div>
     <div id="legend-body"></div>
   </div>
 </div>
@@ -673,7 +953,7 @@
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </div>
-    <div class="nb-lbl">Paramètres</div>
+    <div class="nb-lbl">Options</div>
   </button>
 </nav>
 
@@ -685,41 +965,35 @@
   <div class="mob-sh-handle" id="mob-add-handle"><div class="mob-sh-bar"></div></div>
   <div class="mob-sh-hdr">
     <span class="mob-sh-title">Mes adresses</span>
-    <button class="mob-sh-close" onclick="mobCloseAdd()">✕</button>
+    <button class="mob-sh-close" onclick="mobCloseAdd()">X</button>
   </div>
   <div class="mob-sh-inner">
-    <!-- Add form -->
-    <div class="form" style="margin-bottom:16px;margin-top:14px">
+    <div class="form" style="margin-bottom:12px;margin-top:10px">
       <div>
-        <label class="il">Prénom / Identifiant</label>
+        <label class="il">Prenom / Identifiant</label>
         <input class="gi" id="mob-i-name" placeholder="ex : Marie" autocomplete="off"
           onkeydown="if(event.key==='Enter') document.getElementById('mob-i-addr').focus()" />
       </div>
       <div>
-        <label class="il">Adresse de départ</label>
+        <label class="il">Adresse de depart</label>
         <div class="addr-field-wrap">
-          <input class="gi" id="mob-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+          <input class="gi" id="mob-i-addr" placeholder="ex : 15 rue de Rivoli..." autocomplete="off"
             oninput="onAddrInput(this)"
             onkeydown="onAddrKey(event,'mob')"
             onblur="setTimeout(closeAC, 180)" />
-          <button class="loc-btn" id="loc-btn-mob" title="Ma position" onclick="useMyLocation('mob')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/></svg>
-          </button>
+          <button class="loc-btn" id="loc-btn-mob" title="Ma position" onclick="useMyLocation('mob')">&#x25CE;</button>
         </div>
       </div>
       <button class="btn-add" onclick="mobAddMember()">+ Ajouter</button>
     </div>
-    <!-- Team list -->
-    <div class="lbl" style="margin-bottom:8px">Équipe — <span id="mob-cnt">0</span> personne(s)</div>
+    <div class="lbl" style="margin-bottom:6px">Equipe -- <span id="mob-cnt">0</span> personne(s)</div>
     <div id="mob-team-list" class="team-list">
-      <div class="empty">Aucune adresse ajoutée</div>
+      <div class="empty">Aucune adresse ajoutee</div>
     </div>
   </div>
-  <!-- Sticky find button -->
   <div class="mob-sh-footer">
     <button class="btn-primary" id="mob-btn-find" onclick="runFind()" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
-      Trouver le point optimal
+      &#x25CE; Trouver le point optimal
     </button>
   </div>
 </div>
@@ -729,18 +1003,18 @@
   <div class="mob-sh-handle" id="mob-res-handle"><div class="mob-sh-bar"></div></div>
   <div class="mob-sh-hdr">
     <span class="mob-sh-title">Points de rencontre</span>
-    <button class="mob-sh-close" onclick="mobCloseRes()">✕</button>
+    <button class="mob-sh-close" onclick="mobCloseRes()">X</button>
   </div>
   <div class="mob-sh-inner">
-    <div id="mob-res-list" style="display:flex;flex-direction:column;gap:9px;padding:14px 0 4px"></div>
+    <div id="mob-res-list" style="display:flex;flex-direction:column;gap:4px;padding:10px 0 4px"></div>
   </div>
 </div>
 
 <!-- ── MOBILE: Loading overlay ───────────────────── -->
 <div class="mob-overlay" id="mob-overlay">
-  <div class="card ld-card" style="width:220px">
+  <div class="card ld-card" style="width:200px;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;box-shadow:3px 3px 6px rgba(0,0,0,.5)">
     <div class="spinner"></div>
-    <div class="ld-main" id="mob-ld-main">Géolocalisation…</div>
+    <div class="ld-main" id="mob-ld-main">Geolocalisation...</div>
     <div class="ld-sub"  id="mob-ld-sub"></div>
   </div>
 </div>
@@ -751,36 +1025,33 @@
     <div class="mob-panel-title">Adresses</div>
   </div>
   <div class="mob-panel-body">
-    <div class="card" style="margin-bottom:16px">
-      <div class="lbl" style="margin-bottom:12px">Ajouter une adresse</div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="lbl" style="margin-bottom:8px">Ajouter une adresse</div>
       <div class="form">
         <div>
-          <label class="il">Prénom / Identifiant</label>
+          <label class="il">Prenom / Identifiant</label>
           <input class="gi" id="panel-i-name" placeholder="ex : Marie" autocomplete="off"
             onkeydown="if(event.key==='Enter') document.getElementById('panel-i-addr').focus()" />
         </div>
         <div>
-          <label class="il">Adresse de départ</label>
+          <label class="il">Adresse de depart</label>
           <div class="addr-field-wrap">
-            <input class="gi" id="panel-i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+            <input class="gi" id="panel-i-addr" placeholder="ex : 15 rue de Rivoli..." autocomplete="off"
               oninput="onAddrInput(this)"
               onkeydown="onAddrKey(event,'panel')"
               onblur="setTimeout(closeAC, 180)" />
-            <button class="loc-btn" id="loc-btn-panel" title="Ma position" onclick="useMyLocation('panel')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/></svg>
-            </button>
+            <button class="loc-btn" id="loc-btn-panel" title="Ma position" onclick="useMyLocation('panel')">&#x25CE;</button>
           </div>
         </div>
         <button class="btn-add" onclick="panelAddMember()">+ Ajouter</button>
       </div>
     </div>
-    <div class="lbl" style="margin-bottom:8px">Équipe — <span id="panel-cnt">0</span> personne(s)</div>
-    <div id="panel-team-list" class="team-list" style="margin-bottom:16px">
-      <div class="empty">Aucune adresse ajoutée</div>
+    <div class="lbl" style="margin-bottom:6px">Equipe -- <span id="panel-cnt">0</span> personne(s)</div>
+    <div id="panel-team-list" class="team-list" style="margin-bottom:12px">
+      <div class="empty">Aucune adresse ajoutee</div>
     </div>
     <button class="btn-primary" id="panel-btn-find" onclick="panelFind()" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
-      Trouver le point optimal
+      &#x25CE; Trouver le point optimal
     </button>
   </div>
 </div>
@@ -788,33 +1059,32 @@
 <!-- ── MOBILE: Settings tab panel ────────────────── -->
 <div class="mob-panel" id="mob-panel-settings">
   <div class="mob-panel-hdr">
-    <div class="mob-panel-title">Paramètres</div>
+    <div class="mob-panel-title">Parametres</div>
   </div>
   <div class="mob-panel-body">
-    <div style="margin-bottom:20px">
-      <div class="lbl" style="margin-bottom:10px">Mode de transport</div>
+    <div style="margin-bottom:16px">
+      <div class="lbl" style="margin-bottom:6px">Mode de transport</div>
       <div class="modes">
-        <button class="mode-btn on" id="set-mode-bike"  onclick="setMode('bike')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M15 6h-2l-3.5 6-2 5.5"/><path d="M12 6l2 5.5"/><path d="M5.5 17.5l4.5-5.5L12 6"/></svg> Vélo</button>
-        <button class="mode-btn"   id="set-mode-metro" onclick="setMode('metro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><rect x="5" y="2" width="14" height="16" rx="2"/><path d="M5 10h14"/><path d="M12 2v8"/><circle cx="8.5" cy="14.5" r="1"/><circle cx="15.5" cy="14.5" r="1"/><path d="M8 20l-2 2"/><path d="M16 20l2 2"/></svg> Métro</button>
-        <button class="mode-btn"   id="set-mode-both"  onclick="setMode('both')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M16 3l4 4-4 4"/><path d="M4 7h16"/><path d="M8 21l-4-4 4-4"/><path d="M20 17H4"/></svg> Combiné</button>
+        <button class="mode-btn on" id="set-mode-bike"  onclick="setMode('bike')">&#x1F6B2; Velo</button>
+        <button class="mode-btn"   id="set-mode-metro" onclick="setMode('metro')">&#x1F687; Metro</button>
+        <button class="mode-btn"   id="set-mode-both"  onclick="setMode('both')">&#x21C6; Combine</button>
       </div>
     </div>
-    <div class="card" style="margin-bottom:16px">
-      <div class="lbl" style="margin-bottom:8px">Cache &amp; mises à jour</div>
-      <p style="font-size:12px;color:var(--txt3);line-height:1.6;margin-bottom:12px">
+    <div class="card" style="margin-bottom:12px">
+      <div class="lbl" style="margin-bottom:6px">Cache &amp; mises a jour</div>
+      <p style="font-size:11px;color:var(--win-txt-dim);line-height:1.5;margin-bottom:8px">
         Si l'app ne reflète pas les dernières modifications, vide le cache du service worker et recharge.
       </p>
-      <button class="btn-add" id="clear-cache-btn" onclick="clearAppCache()" style="width:100%;justify-content:center;gap:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
-        Vider le cache et recharger
+      <button class="btn-add" id="clear-cache-btn" onclick="clearAppCache()" style="width:100%;justify-content:center;gap:6px">
+        &#x21BA; Vider le cache et recharger
       </button>
     </div>
     <div class="card">
-      <div class="lbl" style="margin-bottom:8px">À propos</div>
-      <p style="font-size:12.5px;color:var(--txt2);line-height:1.7">
-        <strong style="color:var(--txt)">Mitmi Paris</strong> calcule le point de rencontre géographiquement optimal à Paris en minimisant les temps de trajet de chaque participant.
+      <div class="lbl" style="margin-bottom:6px">A propos</div>
+      <p style="font-size:11px;color:var(--win-txt);line-height:1.6">
+        <strong>Mitmi Paris</strong> calcule le point de rencontre géographiquement optimal à Paris en minimisant les temps de trajet de chaque participant.
       </p>
-      <p style="font-size:11.5px;color:var(--txt3);line-height:1.6;margin-top:8px">
+      <p style="font-size:10px;color:var(--win-txt-dim);line-height:1.5;margin-top:6px">
         Sources : OpenStreetMap, CARTO, OSRM, Overpass API, Base Adresse Nationale.
       </p>
     </div>
@@ -825,7 +1095,7 @@
 // ── CACHE CLEAR ────────────────────────────────────
 async function clearAppCache() {
   const btn = document.getElementById('clear-cache-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Nettoyage…'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Nettoyage...'; }
   try {
     if ('serviceWorker' in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
@@ -833,15 +1103,13 @@ async function clearAppCache() {
     }
     const keys = await caches.keys();
     await Promise.all(keys.map(k => caches.delete(k)));
-    notify('Cache vidé — rechargement…', 'success');
+    notify('Cache vide -- rechargement...', 'success');
     setTimeout(() => location.reload(true), 800);
   } catch(e) {
     notify('Erreur lors du nettoyage du cache.', 'error');
-    if (btn) { btn.disabled = false; btn.innerHTML = '↺ Vider le cache et recharger'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = '&#x21BA; Vider le cache et recharger'; }
   }
 }
-
-// ── APP MODE ───────────────────────────────────────
 
 // ── GEOLOCATION ────────────────────────────────────
 const SRC_IDS = {
@@ -851,7 +1119,7 @@ const SRC_IDS = {
 };
 
 async function useMyLocation(source) {
-  if (!navigator.geolocation) { notify('Géolocalisation non supportée', 'error'); return; }
+  if (!navigator.geolocation) { notify('Geolocalisation non supportee', 'error'); return; }
   const ids = SRC_IDS[source];
   const btn = document.getElementById(ids.btn);
   btn?.classList.add('loading');
@@ -865,7 +1133,6 @@ async function useMyLocation(source) {
       const label = feat ? feat.properties.label : `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
       document.getElementById(ids.addr).value = label;
       acState[source] = { lat, lon };
-      // Auto-fill name if empty
       const nameEl = document.getElementById(ids.name);
       if (nameEl && !nameEl.value.trim()) nameEl.value = 'Moi';
     } catch {
@@ -875,7 +1142,7 @@ async function useMyLocation(source) {
     btn?.classList.remove('loading');
   }, err => {
     btn?.classList.remove('loading');
-    const msg = err.code === 1 ? 'Accès à la position refusé.' : 'Impossible d\'obtenir la position.';
+    const msg = err.code === 1 ? 'Acces a la position refuse.' : 'Impossible d\'obtenir la position.';
     notify(msg, 'error');
   }, { timeout: 8000, maximumAge: 60000 });
 }
@@ -883,11 +1150,10 @@ async function useMyLocation(source) {
 function shareGmaps(lat, lon, name) {
   const url = `https://maps.google.com/?q=${lat},${lon}`;
   if (navigator.share) {
-    navigator.share({ title: `RDV — ${name}`, text: `Notre point de rencontre : ${name}`, url })
-      .catch(() => {});
+    navigator.share({ title: `RDV -- ${name}`, text: `Notre point de rencontre : ${name}`, url }).catch(() => {});
   } else {
     navigator.clipboard?.writeText(url)
-      .then(() => notify('Lien copié !', 'success'))
+      .then(() => notify('Lien copie !', 'success'))
       .catch(() => notify('Lien : ' + url));
   }
 }
@@ -903,20 +1169,20 @@ const S = {
 };
 
 const COLORS = [
-  '#FF6B35','#FF4757','#FFB347','#FF8C42',
-  '#E84393','#FF6B9D','#4ECDC4','#45B7D1'
+  '#0000aa','#aa0000','#007700','#885500',
+  '#006688','#880066','#224488','#664422'
 ];
 
 // ── MAP ────────────────────────────────────────────
 const map = L.map('map', { center:[48.8566,2.3522], zoom:13, zoomControl:false });
 L.control.zoom({ position:'bottomleft' }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:19
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:'&copy; OpenStreetMap contributors', maxZoom:19
 }).addTo(map);
 
 // ── ARRONDISSEMENTS OVERLAY ────────────────────────
-const STYLE_DEFAULT = { color:'rgba(255,135,65,.22)', weight:1, fillColor:'transparent', fillOpacity:0 };
-const STYLE_HOVER   = { color:'rgba(255,135,65,.7)',  weight:1.5, fillColor:'#FF6B35', fillOpacity:.11 };
+const STYLE_DEFAULT = { color:'rgba(0,0,136,.25)', weight:1, fillColor:'transparent', fillOpacity:0 };
+const STYLE_HOVER   = { color:'rgba(0,0,136,.7)',  weight:1.5, fillColor:'#0000aa', fillOpacity:.06 };
 
 let arroLayer = null;
 fetch('https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/arrondissements/exports/geojson?lang=fr')
@@ -928,9 +1194,8 @@ fetch('https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/arrondissemen
         const num = feature.properties.c_ar;
         const label = L.divIcon({
           html: `<div style="
-            font-family:Inter,sans-serif; font-size:12px; font-weight:700;
-            color:rgba(255,185,100,.55); pointer-events:none; white-space:nowrap;
-            text-shadow:0 1px 4px rgba(0,0,0,.8);">${num}e</div>`,
+            font-family:Tahoma,sans-serif; font-size:11px; font-weight:bold;
+            color:rgba(0,0,136,.6); pointer-events:none; white-space:nowrap;">${num}e</div>`,
           className:'', iconAnchor:[10,8]
         });
         const center = layer.getBounds().getCenter();
@@ -965,6 +1230,7 @@ function addMember() {
   document.getElementById('i-addr').value = '';
   document.getElementById('i-name').focus();
   renderTeam(); renderMobTeam(); updateBtn();
+  setStatus2('Membre ajoute : ' + n);
 }
 
 function mobAddMember() {
@@ -1007,6 +1273,7 @@ function removeMember(id) {
     document.getElementById('results').style.display = 'none';
     clearRMarkers(); mobCloseRes();
   }
+  setStatus2(S.members.length + ' membre(s)');
 }
 
 function renderTeam() {
@@ -1016,18 +1283,18 @@ function renderTeam() {
   if (!S.members.length) { el.innerHTML='<div class="empty">Ajoutez des collaborateurs pour commencer</div>'; hideLegend(); return; }
   el.innerHTML = S.members.map(m => `
     <div class="mbr ${m.status}" id="mbr-${m.id}">
-      <div class="av" style="background:linear-gradient(135deg,${m.color},${m.color}aa)">${esc(m.name)[0].toUpperCase()}</div>
+      <div class="av" style="background:${m.color}">${esc(m.name)[0].toUpperCase()}</div>
       <div class="mbr-info">
         <div class="mbr-name">${esc(m.name)}</div>
         <div class="mbr-addr">${esc(m.address)}</div>
       </div>
-      <div class="st ${m.status}"></div>
-      <div class="wgt-ctrl" title="Pondération">
-        <button class="wgt-btn" onclick="setWeight(${m.id},-1)">−</button>
-        <span class="wgt-val${m.weight>1?' hi':''}">×${m.weight}</span>
+      <div class="st ${m.status}" title="${m.status}"></div>
+      <div class="wgt-ctrl" title="Pondereration">
+        <button class="wgt-btn" onclick="setWeight(${m.id},-1)">-</button>
+        <span class="wgt-val${m.weight>1?' hi':''}">x${m.weight}</span>
         <button class="wgt-btn" onclick="setWeight(${m.id},1)">+</button>
       </div>
-      <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">✕</button>
+      <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">X</button>
     </div>`).join('');
 }
 
@@ -1041,20 +1308,20 @@ function renderMobTeam() {
   const html = cnt
     ? S.members.map(m => `
       <div class="mbr ${m.status}">
-        <div class="av" style="background:linear-gradient(135deg,${m.color},${m.color}aa)">${esc(m.name)[0].toUpperCase()}</div>
+        <div class="av" style="background:${m.color}">${esc(m.name)[0].toUpperCase()}</div>
         <div class="mbr-info">
           <div class="mbr-name">${esc(m.name)}</div>
           <div class="mbr-addr">${esc(m.address)}</div>
         </div>
         <div class="st ${m.status}"></div>
-        <div class="wgt-ctrl" title="Pondération">
-          <button class="wgt-btn" onclick="setWeight(${m.id},-1)">−</button>
-          <span class="wgt-val${m.weight>1?' hi':''}">×${m.weight}</span>
+        <div class="wgt-ctrl">
+          <button class="wgt-btn" onclick="setWeight(${m.id},-1)">-</button>
+          <span class="wgt-val${m.weight>1?' hi':''}">x${m.weight}</span>
           <button class="wgt-btn" onclick="setWeight(${m.id},1)">+</button>
         </div>
-        <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">✕</button>
+        <button class="rm-btn" onclick="removeMember(${m.id})" title="Supprimer">X</button>
       </div>`).join('')
-    : '<div class="empty">Aucune adresse ajoutée</div>';
+    : '<div class="empty">Aucune adresse ajoutee</div>';
 
   const mobList   = document.getElementById('mob-team-list');
   const panelList = document.getElementById('panel-team-list');
@@ -1075,6 +1342,11 @@ function updateBtn() {
   });
 }
 
+function setStatus2(msg) {
+  const el = document.getElementById('sb-status');
+  if (el) el.textContent = msg;
+}
+
 // ── GEOCODING ──────────────────────────────────────
 let lastGeo = 0;
 async function geocode(addr) {
@@ -1088,7 +1360,6 @@ async function geocode(addr) {
   return { lat:parseFloat(d[0].lat), lon:parseFloat(d[0].lon) };
 }
 
-// ── REVERSE GEOCODE ────────────────────────────────
 async function reverseGeocode(lat, lon) {
   await sleep(600);
   try {
@@ -1108,7 +1379,6 @@ async function reverseGeocode(lat, lon) {
   return `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
 }
 
-// ── OSRM TABLE ─────────────────────────────────────
 async function osrmTable(sources, dests) {
   const all = [...sources, ...dests];
   const coords = all.map(c => `${c.lon},${c.lat}`).join(';');
@@ -1121,11 +1391,9 @@ async function osrmTable(sources, dests) {
   return d.durations;
 }
 
-// ── CANDIDATES GRID ────────────────────────────────
 function makeCandidates(members) {
   const coords = members.map(m => m.coords);
   const lats = coords.map(c => c.lat), lons = coords.map(c => c.lon);
-  // Weighted centroid — members with higher weight pull the center toward them
   const totalW = members.reduce((a,m) => a + (m.weight||1), 0);
   const clat = members.reduce((a,m) => a + m.coords.lat * (m.weight||1), 0) / totalW;
   const clon = members.reduce((a,m) => a + m.coords.lon * (m.weight||1), 0) / totalW;
@@ -1147,7 +1415,6 @@ function makeCandidates(members) {
   return cands;
 }
 
-// ── DISTANCE ───────────────────────────────────────
 function hav(a, b) {
   const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLon=(b.lon-a.lon)*Math.PI/180;
   const x = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLon/2)**2;
@@ -1155,23 +1422,18 @@ function hav(a, b) {
 }
 function metroEst(km) { return (km/21)*60 + 8; }
 
-// ── SCORING ────────────────────────────────────────
 function score(bikeS, metroMin, weights) {
   const times = S.mode==='bike'  ? bikeS.map(t=>t/60)
               : S.mode==='metro' ? metroMin
               : bikeS.map((t,i)=>Math.min(t/60, metroMin[i]));
   const ws = weights || times.map(()=>1);
   const totalW = ws.reduce((a,b)=>a+b,0);
-  // Weighted average — higher-weight members count more
   const wavg = times.reduce((a,t,i) => a + t * ws[i], 0) / totalW;
-  // Max stays unweighted (fairness: nobody should be left too far)
   const max  = Math.max(...times);
-  // Weighted std deviation
   const wsd  = Math.sqrt(times.reduce((a,t,i) => a + ws[i] * (t - wavg)**2, 0) / totalW);
   return wavg*0.5 + max*0.3 + wsd*0.2;
 }
 
-// ── OVERPASS VENUES ────────────────────────────────
 async function venues(lat, lon) {
   const q = `[out:json][timeout:7];(node["amenity"~"cafe|restaurant|bar|coworking_space"](around:550,${lat},${lon}););out body 7;`;
   try {
@@ -1205,13 +1467,13 @@ async function runFind() {
   if (ldEl)  ldEl.style.display  = 'block';
   if (resEl) resEl.style.display = 'none';
   clearRMarkers();
+  setStatus2('Calcul en cours...');
 
   try {
-    // 1 — Geocode
-    setLd('Géolocalisation des adresses…', '');
+    setLd('Geolocalisation des adresses...', '');
     for (let i=0; i<S.members.length; i++) {
       const m = S.members[i];
-      setLd('Géolocalisation des adresses…', `${m.name} (${i+1}/${S.members.length})`);
+      setLd('Geolocalisation des adresses...', `${m.name} (${i+1}/${S.members.length})`);
       if (m.coords) {
         setStatus(m.id, 'geocoded');
       } else {
@@ -1226,16 +1488,14 @@ async function runFind() {
       }
     }
     const vm = S.members.filter(m=>m.coords);
-    if (vm.length < 2) throw new Error('Au moins 2 adresses valides sont nécessaires.');
+    if (vm.length < 2) throw new Error('Au moins 2 adresses valides sont necessaires.');
     redrawMemberMarkers();
 
-    // 2 — Candidates
-    setLd('Analyse du réseau parisien…', 'Génération des points candidats');
+    setLd('Analyse du reseau parisien...', 'Generation des points candidats');
     await sleep(200);
     const cands = makeCandidates(vm);
 
-    // 3 — Travel times
-    setLd('Calcul des temps de trajet…', `${cands.length} points candidats analysés`);
+    setLd('Calcul des temps de trajet...', `${cands.length} points candidats analyses`);
     let bikeMatrix;
     try {
       bikeMatrix = await osrmTable(vm.map(m=>m.coords), cands);
@@ -1244,8 +1504,7 @@ async function runFind() {
       bikeMatrix = vm.map(m => cands.map(c => (hav(m.coords,c)*1.25/15)*3600));
     }
 
-    // 4 — Score
-    setLd('Optimisation du point de rencontre…', '');
+    setLd('Optimisation du point de rencontre...', '');
     const weights = vm.map(m => m.weight||1);
     const scored = cands.map((c,j) => {
       const bikeS  = vm.map((_,i) => bikeMatrix[i]?.[j] ?? 99999);
@@ -1253,8 +1512,7 @@ async function runFind() {
       return { c, bikeS, metroM, bikeMin:bikeS.map(t=>Math.round(t/60)), metroMin:metroM.map(Math.round), sc:score(bikeS,metroM,weights), vm };
     }).sort((a,b)=>a.sc-b.sc).slice(0,3);
 
-    // 5 — Enrich
-    setLd('Recherche des lieux à proximité…', '');
+    setLd('Recherche des lieux a proximite...', '');
     for (const r of scored) {
       r.loc = await reverseGeocode(r.c.lat, r.c.lon);
       r.venues = await venues(r.c.lat, r.c.lon);
@@ -1273,6 +1531,7 @@ async function runFind() {
     if (resEl) resEl.style.display = 'block';
     renderResults(); addResultMarkers();
     if (scored.length) map.setView([scored[0].c.lat, scored[0].c.lon], 14);
+    setStatus2('Resultats affiches -- ' + scored.length + ' point(s)');
 
   } catch(e) {
     if (isMob) mobOverlay?.classList.remove('mob-overlay-show');
@@ -1280,6 +1539,7 @@ async function runFind() {
     if (btnEl) btnEl.style.display = 'flex';
     if (mobBtn) mobBtn.disabled = S.members.length < 2;
     notify(e.message || 'Une erreur est survenue.', 'error');
+    setStatus2('Erreur');
   }
 }
 
@@ -1293,20 +1553,20 @@ function buildResultHTML(r, i, globalMax, activeIdx) {
   const isOn   = i === activeIdx;
 
   const header = isWin
-    ? `<div class="winner-tag">⭐ Point optimal recommandé</div>`
+    ? `<div class="winner-tag">&#11088; Point optimal recommande</div>`
     : `<div class="rc-head"><div class="rc-badge">${i+1}</div><span class="rc-lbl">Alternative ${i}</span></div>`;
 
   const bars = r.vm.map((m,k) => {
     const bk  = r.bikeMin[k];
     const mt  = r.metroMin[k];
     const pct = Math.round((bk / globalMax) * 100);
-    const col = bk <= avgBk ? '#4ECDC4' : bk <= avgBk*1.35 ? '#FFB347' : '#FF6B35';
+    const col = bk <= avgBk ? '#007700' : bk <= avgBk*1.35 ? '#885500' : '#aa0000';
     return `<div class="tt-bar-row">
       <div class="tt-bar-hd">
-        <div class="tt-bar-nm"><div class="tt-dot" style="background:${m.color}"></div>${esc(m.name)}${(m.weight||1)>1?` <span style="font-size:10px;color:var(--accent);font-weight:700">×${m.weight}</span>`:''}</div>
+        <div class="tt-bar-nm"><div class="tt-dot" style="background:${m.color}"></div>${esc(m.name)}${(m.weight||1)>1?` <span style="font-size:9px;color:#0000cc;font-weight:bold">x${m.weight}</span>`:''}</div>
         <div class="tt-bar-vs">
-          <span class="bdg bk">🚲 ${bk}min</span>
-          <span class="bdg mt">🚇 ~${mt}min</span>
+          <span class="bdg bk">&#x1F6B2; ${bk}min</span>
+          <span class="bdg mt">&#x1F687; ~${mt}min</span>
         </div>
       </div>
       <div class="tt-bar-bg"><div class="tt-bar-fg" style="width:${pct}%;background:${col}"></div></div>
@@ -1317,7 +1577,7 @@ function buildResultHTML(r, i, globalMax, activeIdx) {
 
   const venueHtml = r.venues.length ? `
     <div class="venues-sep">
-      <div class="venues-lbl">À proximité</div>
+      <div class="venues-lbl">A proximite</div>
       <div class="chips">${r.venues.map(v=>`<span class="chip">${venueEmoji(v.type)} ${esc(v.name)}</span>`).join('')}</div>
     </div>` : '';
 
@@ -1325,9 +1585,9 @@ function buildResultHTML(r, i, globalMax, activeIdx) {
     ${header}
     <div class="rc-loc">${esc(r.loc)}</div>
     <div class="score-pills">
-      <div class="score-pill">⏱ Moy. ${avgBk} min</div>
-      <div class="score-pill">📍 Max ${maxBk} min</div>
-      <div class="score-pill">⚖️ Écart ${spread} min</div>
+      <div class="score-pill">&#x23F1; Moy. ${avgBk} min</div>
+      <div class="score-pill">&#x1F4CD; Max ${maxBk} min</div>
+      <div class="score-pill">&#x2696; Ecart ${spread} min</div>
     </div>
     ${bars}${why}${venueHtml}
   </div>`;
@@ -1353,21 +1613,21 @@ function buildWhyText(r, idx, avgBk, maxBk, spread) {
     const altAvg = alt ? Math.round(alt.bikeMin.reduce((a,b)=>a+b,0)/alt.bikeMin.length) : null;
     const gain   = altAvg ? altAvg - avgBk : 0;
     const parts  = [];
-    if (spread <= 8)  parts.push(`les trajets sont très équilibrés — écart de seulement <strong>${spread} min</strong> entre le plus proche et le plus loin`);
-    else if (spread <= 15) parts.push(`l'écart entre membres est contenu (<strong>${spread} min</strong>)`);
-    if (maxBk <= 20)  parts.push(`personne ne dépasse <strong>${maxBk} min</strong>`);
+    if (spread <= 8)  parts.push(`les trajets sont tres equilibres -- ecart de seulement <strong>${spread} min</strong>`);
+    else if (spread <= 15) parts.push(`l'ecart entre membres est contenu (<strong>${spread} min</strong>)`);
+    if (maxBk <= 20)  parts.push(`personne ne depasse <strong>${maxBk} min</strong>`);
     if (gain > 1)     parts.push(`<strong>${gain} min de moins</strong> en moyenne que l'alternative suivante`);
-    const body = parts.length ? parts.join(' · ') + '.' : `temps moyen de <strong>${avgBk} min</strong> pour l'ensemble de l'équipe.`;
+    const body = parts.length ? parts.join(' | ') + '.' : `temps moyen de <strong>${avgBk} min</strong> pour l'ensemble de l'equipe.`;
     return `Ce point obtient le <strong>meilleur score global</strong> : ${body}`;
   } else {
     const best    = S.results[0];
     const bestAvg = Math.round(best.bikeMin.reduce((a,b)=>a+b,0)/best.bikeMin.length);
     const diff    = avgBk - bestAvg;
-    return `<strong>+${diff} min</strong> en moyenne par rapport au point optimal. Peut être préférable si certains membres sont concentrés dans cette zone.`;
+    return `<strong>+${diff} min</strong> en moyenne par rapport au point optimal.`;
   }
 }
 
-function venueEmoji(t) { return {cafe:'☕',restaurant:'🍽️',bar:'🍷',coworking_space:'💻'}[t]||'📍'; }
+function venueEmoji(t) { return {cafe:'[cafe]',restaurant:'[resto]',bar:'[bar]',coworking_space:'[work]'}[t]||'[lieu]'; }
 
 function selectResult(i) {
   S.activeIdx = i;
@@ -1376,6 +1636,7 @@ function selectResult(i) {
   addResultMarkers();
   const r = S.results[i];
   map.setView([r.c.lat, r.c.lon], 15);
+  setStatus2('Point selectionne : ' + (r.loc || ''));
 }
 
 // ── MAP MARKERS ────────────────────────────────────
@@ -1385,11 +1646,17 @@ function redrawMemberMarkers() {
   if (!vm.length) return;
   vm.forEach(m => {
     const ic = L.divIcon({
-      html:`<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,${m.color},${m.color}bb);
-        border:2.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;
-        font-size:13px;font-weight:700;color:#fff;box-shadow:0 3px 14px ${m.color}55;
-        font-family:Inter,sans-serif">${esc(m.name)[0].toUpperCase()}</div>`,
-      className:'', iconSize:[34,34], iconAnchor:[17,17]
+      html:`<div style="
+        width:28px;height:28px;
+        background:${m.color};
+        border-top:2px solid #ffffff;
+        border-left:2px solid #ffffff;
+        border-right:2px solid #404040;
+        border-bottom:2px solid #404040;
+        display:flex;align-items:center;justify-content:center;
+        font-size:11px;font-weight:bold;color:#fff;
+        font-family:Tahoma,sans-serif">${esc(m.name)[0].toUpperCase()}</div>`,
+      className:'', iconSize:[28,28], iconAnchor:[14,14]
     });
     const mk = L.marker([m.coords.lat,m.coords.lon],{icon:ic})
       .bindPopup(`<div class="pp-name">${esc(m.name)}</div><div class="pp-sub">${esc(m.address)}</div>`)
@@ -1406,36 +1673,51 @@ function addResultMarkers() {
   clearRMarkers();
   S.results.forEach((r,i) => {
     const active = i===S.activeIdx;
-    const sz = active ? 42 : 30;
+    const sz = active ? 36 : 26;
+    const bgCol = i===0 ? '#885500' : '#0a246a';
     const ic = L.divIcon({
-      html:`<svg width="${sz}" height="${Math.round(sz*1.28)}" viewBox="0 0 40 51" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="pg${i}" x1="0" y1="0" x2="40" y2="51" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#FF6B35"/><stop offset="100%" stop-color="#FF4757"/>
-        </linearGradient></defs>
-        <path d="M20 0C9 0 0 9 0 20C0 34 20 51 20 51C20 51 40 34 40 20C40 9 31 0 20 0Z" fill="url(#pg${i})"/>
-        ${active?'<circle cx="20" cy="20" r="16" fill="rgba(255,255,255,.12)"/>':''}
-        <text x="20" y="25" text-anchor="middle" fill="white" font-size="${active?'14':'11'}" font-weight="700" font-family="Inter,sans-serif">${i+1}</text>
-      </svg>`,
-      className:'', iconSize:[sz,Math.round(sz*1.28)], iconAnchor:[sz/2,Math.round(sz*1.28)]
+      html:`<div style="
+        width:${sz}px;height:${sz+8}px;
+        position:relative;
+        ">
+        <div style="
+          width:${sz}px;height:${sz}px;
+          background:${bgCol};
+          border-top:2px solid #ffffff;
+          border-left:2px solid #ffffff;
+          border-right:2px solid #404040;
+          border-bottom:2px solid #404040;
+          display:flex;align-items:center;justify-content:center;
+          font-size:${active?'14':'11'}px;font-weight:bold;color:#fff;
+          font-family:Tahoma,sans-serif">
+          ${i+1}
+        </div>
+        <div style="
+          width:0;height:0;
+          border-left:${sz/2}px solid transparent;
+          border-right:${sz/2}px solid transparent;
+          border-top:8px solid ${bgCol};
+          margin:0 auto;
+        "></div>
+      </div>`,
+      className:'', iconSize:[sz,sz+8], iconAnchor:[sz/2,sz+8]
     });
     const avgBk = Math.round(r.bikeMin.reduce((a,b)=>a+b,0)/r.bikeMin.length);
     const timesHtml = r.vm.map((m,k) =>
-      `<div class="pp-sub" style="margin-top:4px"><span style="color:${m.color}">●</span> ${esc(m.name)} — 🚲 ${r.bikeMin[k]} min · 🚇 ~${r.metroMin[k]} min</div>`
+      `<div class="pp-sub" style="margin-top:3px"><span style="color:${m.color};font-weight:bold">&#9632;</span> ${esc(m.name)} -- &#x1F6B2; ${r.bikeMin[k]} min | &#x1F687; ~${r.metroMin[k]} min</div>`
     ).join('');
     const gmapsUrl = `https://maps.google.com/?q=${r.c.lat},${r.c.lon}`;
     const persoActions = `
       <div class="pp-actions">
         <a class="pp-action-btn" href="${gmapsUrl}" target="_blank" rel="noopener" title="Ouvrir dans Google Maps">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Maps
+          &#x1F5FA; Maps
         </a>
-        <button class="pp-action-btn pp-share" onclick="shareGmaps(${r.c.lat},${r.c.lon},'${esc(r.loc).replace(/'/g,"\\'")}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          Partager
+        <button class="pp-action-btn" onclick="shareGmaps(${r.c.lat},${r.c.lon},'${esc(r.loc).replace(/'/g,"\\'")}')">
+          &#x1F4CB; Partager
         </button>
       </div>`;
     const mk = L.marker([r.c.lat,r.c.lon],{icon:ic, zIndexOffset:active?1000:0})
-      .bindPopup(`<div class="pp-name">${i===0?'⭐ ':''}${i+1}. ${esc(r.loc)}</div><div class="pp-sub" style="margin-bottom:5px;color:rgba(255,179,71,.8)">⌀ ${avgBk} min à vélo</div>${timesHtml}${persoActions}`)
+      .bindPopup(`<div class="pp-name">${i===0?'[Optimal] ':''}${i+1}. ${esc(r.loc)}</div><div class="pp-sub" style="margin-bottom:4px;font-weight:bold">Moy. ${avgBk} min a velo</div>${timesHtml}${persoActions}`)
       .addTo(map);
     if (active) mk.openPopup();
     S.rMarkers.push(mk);
@@ -1467,7 +1749,6 @@ function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
 // ── AUTOCOMPLETE (BAN API) ─────────────────────────
-// Per-source coords: acState.desktop / acState.mob / acState.panel
 const acState = { desktop:null, mob:null, panel:null };
 let acTimer = null, acItems = [], acIdx = -1, acActiveInput = null;
 
@@ -1507,7 +1788,7 @@ function renderAC() {
       <div class="ac-sub">${typeLabel(it.type)}</div>
     </div>`).join('');
   const r = acActiveInput.getBoundingClientRect();
-  list.style.top   = (r.bottom + 4) + 'px';
+  list.style.top   = (r.bottom + 2) + 'px';
   list.style.left  = r.left + 'px';
   list.style.width = r.width + 'px';
   list.classList.add('open');
@@ -1555,10 +1836,8 @@ function typeLabel(t) {
   return { housenumber:'Adresse', street:'Rue / voie', locality:'Lieu-dit', municipality:'Commune' }[t] || 'Adresse';
 }
 
-// Enter key shortcut on desktop name input
 document.getElementById('i-name').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('i-addr').focus(); });
 
-// ── PANEL FIND (from Adresses tab) ─────────────────
 function panelFind() {
   if (window.innerWidth <= 768) mobSetTab('carte');
   runFind();
@@ -1576,7 +1855,6 @@ function mobSetTab(tab) {
   if (fab) fab.style.display = tab === 'carte' ? 'flex' : 'none';
 
   if (tab !== 'carte') { mobCloseAdd(); }
-
   renderMobTeam();
 }
 
@@ -1584,11 +1862,9 @@ function mobOpenAdd() {
   document.getElementById('mob-add-sheet')?.classList.add('mob-open');
   renderMobTeam();
 }
-
 function mobCloseAdd() {
   document.getElementById('mob-add-sheet')?.classList.remove('mob-open');
 }
-
 function mobCloseRes() {
   document.getElementById('mob-res-sheet')?.classList.remove('mob-open');
 }
@@ -1598,15 +1874,9 @@ function mobCloseRes() {
   ['mob-add-sheet','mob-res-sheet'].forEach(sheetId => {
     const sheet  = document.getElementById(sheetId);
     if (!sheet) return;
-    // Drag zone = handle bar + header row
     const dragZones = [sheet.querySelector('.mob-sh-handle'), sheet.querySelector('.mob-sh-hdr')].filter(Boolean);
-
     let startY = 0, startTrans = 0, dragging = false;
-
-    function getY() {
-      return new DOMMatrix(window.getComputedStyle(sheet).transform).m42;
-    }
-
+    function getY() { return new DOMMatrix(window.getComputedStyle(sheet).transform).m42; }
     dragZones.forEach(zone => {
       zone.addEventListener('touchstart', e => {
         dragging = true;
@@ -1615,14 +1885,12 @@ function mobCloseRes() {
         sheet.style.transition = 'none';
       }, { passive:true });
     });
-
     window.addEventListener('touchmove', e => {
       if (!dragging) return;
       const dy = e.touches[0].clientY - startY;
       const raw = Math.max(0, startTrans + dy);
       sheet.style.transform = `translateY(${raw}px)`;
     }, { passive:true });
-
     window.addEventListener('touchend', () => {
       if (!dragging) return;
       dragging = false;
@@ -1638,8 +1906,6 @@ function mobCloseRes() {
       }
     });
   });
-
-  // Tap map to close add-sheet
   document.getElementById('map')?.addEventListener('click', () => {
     if (window.innerWidth <= 768) mobCloseAdd();
   });
@@ -1647,7 +1913,6 @@ function mobCloseRes() {
 </script>
 
 <script>
-  // Register Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
