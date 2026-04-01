@@ -201,6 +201,29 @@
     }
     .btn-demo:hover { background:rgba(255,179,71,.13); }
 
+    /* Autocomplete */
+    .ac-wrap { position:relative; }
+    .ac-list {
+      position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:999;
+      background:rgba(18,7,11,.96); backdrop-filter:blur(20px);
+      border:1px solid var(--glass-bd-s); border-radius:10px;
+      overflow:hidden; display:none;
+      box-shadow:0 8px 28px rgba(0,0,0,.5);
+    }
+    .ac-list.open { display:block; }
+    .ac-item {
+      padding:9px 12px; cursor:pointer;
+      border-bottom:1px solid rgba(255,135,65,.07);
+      transition:background .12s;
+      display:flex; flex-direction:column; gap:1px;
+    }
+    .ac-item:last-child { border-bottom:none; }
+    .ac-item:hover, .ac-item.hi {
+      background:rgba(255,107,53,.12);
+    }
+    .ac-main { font-size:12.5px; color:var(--txt); }
+    .ac-sub  { font-size:10.5px; color:var(--txt3); }
+
     /* Primary button */
     .btn-primary {
       width:100%; padding:13px;
@@ -404,7 +427,13 @@
         </div>
         <div>
           <label class="il">Adresse de départ</label>
-          <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli, Paris" autocomplete="off" />
+          <div class="ac-wrap">
+            <input class="gi" id="i-addr" placeholder="ex : 15 rue de Rivoli…" autocomplete="off"
+              oninput="onAddrInput(this.value)"
+              onkeydown="onAddrKey(event)"
+              onblur="setTimeout(closeAC, 150)" />
+            <div class="ac-list" id="ac-list"></div>
+          </div>
         </div>
         <button class="btn-add" onclick="addMember()">+ Ajouter</button>
       </div>
@@ -646,14 +675,18 @@ async function runFind() {
     setLd('Géolocalisation des adresses…', '');
     for (let i=0; i<S.members.length; i++) {
       const m = S.members[i];
-      setStatus(m.id, 'loading');
       setLd('Géolocalisation des adresses…', `${m.name} (${i+1}/${S.members.length})`);
-      try {
-        m.coords = await geocode(m.address);
-        setStatus(m.id, 'geocoded');
-      } catch {
-        setStatus(m.id, 'error');
-        notify(`Adresse introuvable pour ${m.name}.`, 'error');
+      if (m.coords) {
+        setStatus(m.id, 'geocoded'); // already geocoded via autocomplete
+      } else {
+        setStatus(m.id, 'loading');
+        try {
+          m.coords = await geocode(m.address);
+          setStatus(m.id, 'geocoded');
+        } catch {
+          setStatus(m.id, 'error');
+          notify(`Adresse introuvable pour ${m.name}.`, 'error');
+        }
       }
     }
     const vm = S.members.filter(m=>m.coords);
@@ -855,8 +888,99 @@ function notify(msg,type='info'){
 function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
+// ── AUTOCOMPLETE (BAN API) ─────────────────────────
+let acTimer = null, acItems = [], acIdx = -1, acCoords = null;
+
+function onAddrInput(val) {
+  acCoords = null;
+  clearTimeout(acTimer);
+  if (val.length < 3) { closeAC(); return; }
+  acTimer = setTimeout(() => searchBAN(val), 220);
+}
+
+async function searchBAN(q) {
+  try {
+    const r = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&limit=6&autocomplete=1`);
+    const d = await r.json();
+    acItems = (d.features || []).map(f => ({
+      label: f.properties.label,
+      city:  f.properties.city,
+      type:  f.properties.type,
+      lat:   f.geometry.coordinates[1],
+      lon:   f.geometry.coordinates[0],
+    }));
+    renderAC();
+  } catch { closeAC(); }
+}
+
+function renderAC() {
+  const list = document.getElementById('ac-list');
+  if (!acItems.length) { closeAC(); return; }
+  acIdx = -1;
+  list.innerHTML = acItems.map((it, i) => `
+    <div class="ac-item" id="ac-${i}" onmousedown="pickAC(${i})">
+      <div class="ac-main">${esc(it.label)}</div>
+      <div class="ac-sub">${typeLabel(it.type)}</div>
+    </div>`).join('');
+  list.classList.add('open');
+}
+
+function onAddrKey(e) {
+  const list = document.getElementById('ac-list');
+  const open = list.classList.contains('open');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (!open) return;
+    acIdx = Math.min(acIdx + 1, acItems.length - 1);
+    highlightAC();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acIdx = Math.max(acIdx - 1, -1);
+    highlightAC();
+  } else if (e.key === 'Enter') {
+    if (open && acIdx >= 0) { e.preventDefault(); pickAC(acIdx); }
+    else { closeAC(); addMember(); }
+  } else if (e.key === 'Escape') {
+    closeAC();
+  }
+}
+
+function highlightAC() {
+  document.querySelectorAll('.ac-item').forEach((el, i) => el.classList.toggle('hi', i === acIdx));
+}
+
+function pickAC(i) {
+  const it = acItems[i];
+  document.getElementById('i-addr').value = it.label;
+  acCoords = { lat: it.lat, lon: it.lon };
+  closeAC();
+}
+
+function closeAC() {
+  document.getElementById('ac-list').classList.remove('open');
+  acItems = []; acIdx = -1;
+}
+
+function typeLabel(t) {
+  return { housenumber:'Adresse', street:'Rue / voie', locality:'Lieu-dit', municipality:'Commune' }[t] || 'Adresse';
+}
+
+// Patch addMember to capture pre-geocoded coords
+const _origAddMember = addMember;
+addMember = function() {
+  const savedCoords = acCoords;
+  acCoords = null;
+  _origAddMember();
+  // If coords were captured from autocomplete, attach them to the last member
+  if (savedCoords && S.members.length) {
+    const m = S.members[S.members.length - 1];
+    m.coords = savedCoords;
+    m.status = 'geocoded';
+    renderTeam();
+  }
+};
+
 // Enter key shortcuts
-document.getElementById('i-addr').addEventListener('keydown',e=>{ if(e.key==='Enter') addMember(); });
 document.getElementById('i-name').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('i-addr').focus(); });
 </script>
 </body>
