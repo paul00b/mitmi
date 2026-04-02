@@ -1437,6 +1437,19 @@ function addResultMarkers() {
     const mk = L.marker([r.c.lat,r.c.lon],{icon:ic, zIndexOffset:active?1000:0})
       .bindPopup(`<div class="pp-name">${i===0?'⭐ ':''}${i+1}. ${esc(r.loc)}</div><div class="pp-sub" style="margin-bottom:5px;color:rgba(255,179,71,.8)">⌀ ${avgBk} min à vélo</div>${timesHtml}${persoActions}`)
       .addTo(map);
+    mk.on('popupopen', (function(idx, marker){
+      return function() {
+        if (window.innerWidth > 768) return;
+        const el = marker.getPopup().getElement();
+        if (!el) return;
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function() {
+          marker.closePopup();
+          selectResult(idx);
+          document.getElementById('mob-res-sheet')?.classList.add('mob-open');
+        }, { once: true });
+      };
+    })(i, mk));
     if (active) mk.openPopup();
     S.rMarkers.push(mk);
   });
